@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Menu, X, Send, ChevronDown } from "lucide-react"
+import { Menu, X, ChevronDown } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -12,7 +12,6 @@ import { getStoreUrl } from "@/lib/device-utils"
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { language, setLanguage, t, languages } = useLanguage()
-
   const currentLang = languages.find((l) => l.code === language) || languages[0]
 
   const handleStartClick = () => {
@@ -21,33 +20,27 @@ export function Header() {
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-sm">
-      <nav className="container mx-auto px-6 h-20 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+      <nav className="container mx-auto px-6 h-16 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-2.5">
           <Image
             src="/unnamed.jpeg"
             alt="FoxyWall Logo"
-            width={40}
-            height={40}
-            className="w-10 h-10 rounded-full object-cover"
+            width={36}
+            height={36}
+            className="w-9 h-9 rounded-lg object-cover"
           />
-          <div className="flex flex-col leading-none">
-            <span className="text-lg font-semibold text-foreground">Foxy</span>
-            <span className="text-xs text-muted-foreground">Wall</span>
-          </div>
+          <span className="text-xl font-bold text-foreground">FoxyWall</span>
         </Link>
 
-        <div className="hidden md:flex items-center gap-6">
-          <Link href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+        <div className="hidden md:flex items-center gap-8">
+          <Link href="#features" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
             {t("features")}
           </Link>
-          <Link href="#pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <Link href="#pricing" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
             {t("pricing")}
           </Link>
-          <Link href="#download" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-            {t("download")}
-          </Link>
-          <Link href="/blog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <Link href="/blog" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
             Blog
           </Link>
         </div>
@@ -56,11 +49,11 @@ export function Header() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="sm" className="text-foreground gap-1.5">
-                <span className="text-xl">{currentLang.flag}</span>
+                <span className="text-base">{currentLang.flag}</span>
                 <ChevronDown className="w-3 h-3 opacity-50" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="bg-card border-border min-w-[160px]">
+            <DropdownMenuContent align="end" className="bg-background border-border min-w-[160px]">
               {languages.map((lang) => (
                 <DropdownMenuItem
                   key={lang.code}
@@ -75,11 +68,10 @@ export function Header() {
           </DropdownMenu>
           <Button
             size="sm"
-            className="bg-primary text-primary-foreground hover:bg-primary/90 gap-2 rounded-full px-5"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-6 font-semibold"
             onClick={handleStartClick}
           >
             {t("start")}
-            <Send className="w-4 h-4" />
           </Button>
         </div>
 
@@ -90,59 +82,21 @@ export function Header() {
 
       {mobileMenuOpen && (
         <div className="md:hidden bg-background border-b border-border">
-          <div className="container mx-auto px-6 py-4 flex flex-col gap-4">
-            <Link
-              href="#features"
-              className="text-muted-foreground hover:text-foreground transition-colors py-2"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              {t("features")}
-            </Link>
-            <Link
-              href="#pricing"
-              className="text-muted-foreground hover:text-foreground transition-colors py-2"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              {t("pricing")}
-            </Link>
-            <Link
-              href="#download"
-              className="text-muted-foreground hover:text-foreground transition-colors py-2"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              {t("download")}
-            </Link>
-            <Link
-              href="/blog"
-              className="text-muted-foreground hover:text-foreground transition-colors py-2"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Blog
-            </Link>
-            <div className="pt-4 border-t border-border">
-              <p className="text-xs text-muted-foreground mb-3">{t("language")}</p>
-              <div className="grid grid-cols-2 gap-2">
+          <div className="container mx-auto px-6 py-4 flex flex-col gap-3">
+            <Link href="#features" className="text-muted-foreground hover:text-foreground py-2 font-medium" onClick={() => setMobileMenuOpen(false)}>{t("features")}</Link>
+            <Link href="#pricing" className="text-muted-foreground hover:text-foreground py-2 font-medium" onClick={() => setMobileMenuOpen(false)}>{t("pricing")}</Link>
+            <Link href="/blog" className="text-muted-foreground hover:text-foreground py-2 font-medium" onClick={() => setMobileMenuOpen(false)}>Blog</Link>
+            <div className="pt-3 border-t border-border">
+              <div className="grid grid-cols-2 gap-2 mb-4">
                 {languages.map((lang) => (
-                  <button
-                    key={lang.code}
-                    onClick={() => setLanguage(lang.code)}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
-                      language === lang.code ? "bg-primary/20 text-primary" : "bg-card hover:bg-card/80 text-foreground"
-                    }`}
-                  >
-                    <span>{lang.flag}</span>
-                    <span>{lang.name}</span>
+                  <button key={lang.code} onClick={() => setLanguage(lang.code)}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${language === lang.code ? "bg-primary/10 text-primary" : "hover:bg-secondary text-foreground"}`}>
+                    <span>{lang.flag}</span><span>{lang.name}</span>
                   </button>
                 ))}
               </div>
-            </div>
-            <div className="flex flex-col gap-2 pt-4 border-t border-border">
-              <Button
-                className="w-full bg-primary text-primary-foreground hover:bg-primary/90 gap-2 rounded-full"
-                onClick={handleStartClick}
-              >
+              <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-full font-semibold" onClick={handleStartClick}>
                 {t("start")}
-                <Send className="w-4 h-4" />
               </Button>
             </div>
           </div>

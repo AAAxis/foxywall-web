@@ -107,7 +107,7 @@ export default function BlogPostPage() {
             )}
 
             <div
-              className="prose prose-invert prose-lg max-w-none
+              className="prose prose-lg max-w-none
                 prose-headings:text-foreground prose-p:text-muted-foreground
                 prose-a:text-primary prose-strong:text-foreground
                 prose-code:bg-secondary prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded

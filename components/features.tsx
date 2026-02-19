@@ -1,54 +1,46 @@
 "use client"
 
+import { Shield, Globe, Zap, Lock, Users, Wifi, Eye, Server } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 export function Features() {
   const { t } = useLanguage()
 
   const features = [
-    t("feature1"),
-    t("feature2"),
-    t("feature3"),
-    t("feature4"),
-    t("feature5"),
-    t("feature6"),
-    t("feature7"),
-    t("feature8"),
+    { icon: Shield, text: t("feature1") },
+    { icon: Users, text: t("feature2") },
+    { icon: Globe, text: t("feature3") },
+    { icon: Wifi, text: t("feature4") },
+    { icon: Lock, text: t("feature5") },
+    { icon: Zap, text: t("feature6") },
+    { icon: Eye, text: t("feature7") },
+    { icon: Server, text: t("feature8") },
   ]
 
   return (
-    <section id="features" className="py-16 md:py-24 relative">
+    <section id="features" className="py-20 md:py-28">
       <div className="container mx-auto px-6">
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
-          <div className="relative hidden lg:block">
-            <div className="aspect-square max-w-md mx-auto relative">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-64 h-64 rounded-full border border-border/50" />
-                <div className="absolute w-48 h-48 rounded-full border border-border/30" />
-                <div className="absolute w-32 h-32 rounded-full border border-primary/30" />
-                <div className="absolute w-16 h-16 rounded-full bg-primary/20" />
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            {t("trustedByThousands")}
+          </h2>
+          <p className="text-muted-foreground text-lg max-w-lg mx-auto">
+            Everything you need for secure, private browsing.
+          </p>
+        </div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto">
+          {features.map((feature, index) => (
+            <div
+              key={index}
+              className="bg-card border border-border rounded-2xl p-6 hover:shadow-lg hover:border-primary/20 transition-all group"
+            >
+              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+                <feature.icon className="w-6 h-6 text-primary" />
               </div>
+              <p className="text-foreground font-medium leading-relaxed">{feature.text}</p>
             </div>
-          </div>
-
-          <div className="relative">
-            <div className="hidden xl:block absolute -right-20 top-1/2 -translate-y-1/2">
-              <p className="text-muted-foreground/50 text-sm tracking-[0.3em] rotate-90 whitespace-nowrap origin-center">
-                {t("trustedByThousands")}
-              </p>
-            </div>
-
-            <div className="space-y-3">
-              {features.map((feature, index) => (
-                <div
-                  key={index}
-                  className="bg-secondary/50 backdrop-blur-sm border-l-2 border-primary/50 pl-4 pr-6 py-4 rounded-r-lg hover:bg-secondary/80 transition-colors"
-                >
-                  <p className="text-foreground">{feature}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>
