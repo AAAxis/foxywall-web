@@ -117,7 +117,7 @@ export function Hero() {
                 <p className="text-sm text-muted-foreground">{t("availableOnIosAndroid")}</p>
                 <div className="flex flex-wrap justify-center gap-4">
                   <Link
-                    href="https://apps.apple.com/us/app/foxywall/id6755795018"
+                    href="https://apps.apple.com/app/id6757646633"
                     target="_blank"
                     className="inline-flex items-center gap-2 bg-foreground text-background px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-all hover:scale-105"
                   >
@@ -144,11 +144,13 @@ export function Hero() {
                 className="space-y-4"
               >
                 <p className="text-sm text-muted-foreground">{t("availableForChrome")}</p>
-                <Button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 py-3 font-semibold gap-2 hover:scale-105 transition-transform">
-                  <Chrome className="w-5 h-5" />
-                  {t("downloadExtension")}
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
+                <Link href="https://github.com/AAAxis/chrome-proxy" target="_blank">
+                  <Button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 py-3 font-semibold gap-2 hover:scale-105 transition-transform">
+                    <Chrome className="w-5 h-5" />
+                    {t("downloadExtension")}
+                    <ArrowRight className="w-4 h-4" />
+                  </Button>
+                </Link>
               </motion.div>
             )}
           </motion.div>
