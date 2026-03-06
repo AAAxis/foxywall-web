@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useState, type ReactNode } from "react"
+import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
 import { type Language, translations, languages } from "./translations"
 
 type LanguageContextType = {
@@ -14,6 +14,13 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>("en")
+
+  useEffect(() => {
+    const browserLang = navigator.language || (navigator as any).userLanguage || ""
+    if (browserLang.startsWith("ru")) {
+      setLanguage("ru")
+    }
+  }, [])
 
   const t = (key: string) => {
     const translation = translations[language] as Record<string, string>
