@@ -42,6 +42,7 @@ export const translations = {
     start: "START",
     language: "Language",
     blog: "Blog",
+    referGiftCta: "Give a friend 30 days free",
     serversCount: "200+ Servers",
 
     // Hero
@@ -122,6 +123,7 @@ export const translations = {
     start: "शुरू करें",
     language: "भाषा",
     blog: "ब्लॉग",
+    referGiftCta: "दोस्त को 30 दिन मुफ्त दें",
     serversCount: "200+ सर्वर",
 
     // Hero
@@ -201,6 +203,7 @@ export const translations = {
     start: "开始",
     language: "语言",
     blog: "博客",
+    referGiftCta: "送朋友 30 天免费试用",
     serversCount: "200+ 服务器",
 
     // Hero
@@ -280,6 +283,7 @@ export const translations = {
     start: "СТАРТ",
     language: "Язык",
     blog: "Блог",
+    referGiftCta: "Подарите другу 30 дней бесплатно",
     serversCount: "200+ серверов",
 
     // Hero
@@ -360,6 +364,7 @@ export const translations = {
     start: "DÉMARRER",
     language: "Langue",
     blog: "Blog",
+    referGiftCta: "Offrez 30 jours gratuits a un ami",
     serversCount: "200+ serveurs",
 
     // Hero
@@ -440,6 +445,7 @@ export const translations = {
     start: "STARTEN",
     language: "Sprache",
     blog: "Blog",
+    referGiftCta: "Schenken Sie einem Freund 30 Tage gratis",
     serversCount: "200+ Server",
 
     // Hero
@@ -521,6 +527,7 @@ export const translations = {
     start: "INICIAR",
     language: "Idioma",
     blog: "Blog",
+    referGiftCta: "Regala a un amigo 30 dias gratis",
     serversCount: "200+ servidores",
 
     // Hero
@@ -601,6 +608,7 @@ export const translations = {
     start: "INICIAR",
     language: "Idioma",
     blog: "Blog",
+    referGiftCta: "De 30 dias gratis para um amigo",
     serversCount: "200+ servidores",
 
     // Hero
@@ -676,18 +684,22 @@ export const translations = {
   he: {
     language: "שפה",
     blog: "בלוג",
+    referGiftCta: "תנו לחבר 30 ימים בחינם",
   },
   id: {
     language: "Bahasa",
     blog: "Blog",
+    referGiftCta: "Berikan teman 30 hari gratis",
   },
   ja: {
     language: "言語",
     blog: "ブログ",
+    referGiftCta: "友達に30日間無料を贈る",
   },
   tr: {
     language: "Dil",
     blog: "Blog",
+    referGiftCta: "Bir arkadasina 30 gun ucretsiz ver",
     serversCount: "200+ Sunucu",
     featuresSectionTitle: "Ozellikler",
     featuresSectionSubtitle: "Maksimum guvenlik",
@@ -717,14 +729,17 @@ export const translations = {
   uk: {
     language: "Мова",
     blog: "Блог",
+    referGiftCta: "Подаруйте другу 30 днiв безкоштовно",
   },
   vi: {
     language: "Ngon ngu",
     blog: "Blog",
+    referGiftCta: "Tang ban 30 ngay mien phi",
   },
   ar: {
     language: "اللغة",
     blog: "المدونة",
+    referGiftCta: "امنح صديقا 30 يوما مجانا",
     serversCount: "200+ خادم",
     featuresSectionTitle: "الميزات",
     featuresSectionSubtitle: "اقصى حماية",

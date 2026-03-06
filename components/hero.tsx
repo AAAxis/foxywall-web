@@ -68,7 +68,7 @@ export function Hero() {
               href={`/${language}/refer`}
               className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500/10 to-amber-500/10 border border-orange-500/20 text-primary rounded-full px-5 py-2 text-sm font-medium mb-6 hover:border-orange-500/40 transition-colors"
             >
-              🎁 Give a friend 30 days free <ArrowRight className="w-3.5 h-3.5" />
+              🎁 {t("referGiftCta")} <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </motion.div>
 
