@@ -116,15 +116,17 @@ export function Pricing() {
                 ))}
               </ul>
 
-              <Button
-                className={`w-full rounded-full py-3 font-semibold transition-all hover:scale-[1.02] ${
-                  plan.popular
-                    ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:shadow-lg hover:shadow-primary/20 border-0"
-                    : "bg-secondary text-foreground hover:bg-secondary/80"
-                }`}
-              >
-                {t("start")}
-              </Button>
+              <a href="https://pay.rev.cat/pzcicgzdkqlwadcj/" target="_blank" rel="noopener noreferrer" className="block">
+                <Button
+                  className={`w-full rounded-full py-3 font-semibold transition-all hover:scale-[1.02] ${
+                    plan.popular
+                      ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:shadow-lg hover:shadow-primary/20 border-0"
+                      : "bg-secondary text-foreground hover:bg-secondary/80"
+                  }`}
+                >
+                  {t("start")}
+                </Button>
+              </a>
             </motion.div>
           ))}
         </div>
