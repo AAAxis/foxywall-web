@@ -25,6 +25,17 @@ export function LanguageProvider({
     setLanguage(initialLanguage)
   }, [initialLanguage])
 
+  useEffect(() => {
+    if (initialLanguage !== defaultLanguage) {
+      return
+    }
+
+    const browserLang = navigator.language || (navigator as any).userLanguage || ""
+    if (browserLang.startsWith("ru")) {
+      setLanguage("ru")
+    }
+  }, [initialLanguage])
+
   const t = useMemo(
     () => (key: string) => {
       const translation = translations[language] as Record<string, string>
