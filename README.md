@@ -16,7 +16,6 @@ Your project is live at:
 
 **[https://vercel.com/aaaxis-projects/v0-monti-vpn-website](https://vercel.com/aaaxis-projects/v0-monti-vpn-website)**
 
-## Build your app
 
 Continue building your app on:
 
