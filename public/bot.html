@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>FoxyWall VPN</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .title {
+    color: #fff;
+    font-size: 24px;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .title span { color: #ff6b35; }
+
+  .subtitle {
+    color: rgba(255,255,255,0.6);
+    font-size: 14px;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  .fox-container {
+    position: relative;
+    width: 280px;
+    height: 280px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .fox-body {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.3s ease;
+  }
+
+  .fox-container:active .fox-body { transform: scale(0.95); }
+
+  .fox-container.happy .fox-body {
+    animation: foxHappy 0.6s ease;
+  }
+
+  @keyframes foxHappy {
+    0% { transform: scale(1) rotate(0deg); }
+    25% { transform: scale(1.1) rotate(-5deg); }
+    50% { transform: scale(1.05) rotate(5deg); }
+    75% { transform: scale(1.1) rotate(-3deg); }
+    100% { transform: scale(1) rotate(0deg); }
+  }
+
+  .heart {
+    position: absolute;
+    font-size: 24px;
+    animation: floatHeart 1s ease-out forwards;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  @keyframes floatHeart {
+    0% { opacity: 1; transform: translateY(0) scale(0.5); }
+    50% { opacity: 1; transform: translateY(-60px) scale(1.2); }
+    100% { opacity: 0; transform: translateY(-120px) scale(0.8); }
+  }
+
+  .sparkle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #ffcc00;
+    border-radius: 50%;
+    animation: sparkle 0.8s ease-out forwards;
+    pointer-events: none;
+  }
+
+  @keyframes sparkle {
+    0% { opacity: 1; transform: scale(0); }
+    50% { opacity: 1; transform: scale(1.5); }
+    100% { opacity: 0; transform: scale(0) translateY(-40px); }
+  }
+
+  .pet-counter {
+    color: rgba(255,255,255,0.5);
+    font-size: 13px;
+    margin-top: 20px;
+    text-align: center;
+  }
+
+  .fox-idle { animation: breathe 3s ease-in-out infinite; }
+
+  @keyframes breathe {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .fox-tail {
+    transform-origin: 70% 85%;
+    animation: tailWag 2s ease-in-out infinite;
+  }
+
+  @keyframes tailWag {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(10deg); }
+    75% { transform: rotate(-10deg); }
+  }
+
+  .paw-prints {
+    position: fixed;
+    bottom: 20px;
+    color: rgba(255,255,255,0.15);
+    font-size: 20px;
+    letter-spacing: 8px;
+  }
+
+  /* Platform selection screen */
+  .platform-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    animation: fadeIn 0.5s ease;
+  }
+
+  .platform-screen.visible {
+    display: flex;
+  }
+
+  .platform-title {
+    color: #fff;
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .platform-subtitle {
+    color: rgba(255,255,255,0.6);
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+
+  .platform-btn {
+    width: 260px;
+    padding: 16px 24px;
+    border: none;
+    border-radius: 16px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: transform 0.2s;
+  }
+
+  .platform-btn:active { transform: scale(0.95); }
+
+  .platform-btn.ios {
+    background: linear-gradient(135deg, #007AFF, #5856D6);
+    color: #fff;
+  }
+
+  .platform-btn.android {
+    background: linear-gradient(135deg, #34A853, #0F9D58);
+    color: #fff;
+  }
+
+  .platform-btn .icon { font-size: 24px; }
+
+  .promo-code {
+    background: rgba(255,255,255,0.1);
+    border: 2px dashed rgba(255,255,255,0.3);
+    border-radius: 12px;
+    padding: 16px 24px;
+    text-align: center;
+    display: none;
+    animation: fadeIn 0.5s ease;
+  }
+
+  .promo-code.visible { display: block; }
+
+  .promo-code .label {
+    color: rgba(255,255,255,0.6);
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+
+  .promo-code .code {
+    color: #ff6b35;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 3px;
+  }
+
+  .promo-code .hint {
+    color: rgba(255,255,255,0.4);
+    font-size: 11px;
+    margin-top: 8px;
+  }
+
+  .back-btn {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.4);
+    font-size: 13px;
+    cursor: pointer;
+    margin-top: 12px;
+    padding: 8px 16px;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fox-screen { display: flex; flex-direction: column; align-items: center; }
+  .fox-screen.hidden { display: none; }
+</style>
+</head>
+<body>
+
+<!-- Fox petting screen -->
+<div class="fox-screen" id="foxScreen">
+  <div class="title">Бесплатный <span>Foxy VPN</span></div>
+  <div class="subtitle">Погладь лису — получи VPN! 🐾</div>
+
+  <div class="fox-container" id="foxContainer">
+    <div class="fox-body fox-idle">
+      <svg viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="140" cy="190" rx="70" ry="60" fill="#ff8c42"/>
+        <ellipse cx="140" cy="200" rx="45" ry="40" fill="#ffe0b2"/>
+        <circle cx="140" cy="110" r="55" fill="#ff6b35"/>
+        <ellipse cx="140" cy="120" rx="38" ry="35" fill="#ffe0b2"/>
+        <polygon points="95,70 80,20 115,60" fill="#ff6b35"/>
+        <polygon points="98,65 88,30 112,58" fill="#ffe0b2"/>
+        <polygon points="185,70 200,20 165,60" fill="#ff6b35"/>
+        <polygon points="182,65 192,30 168,58" fill="#ffe0b2"/>
+        <g class="fox-eyes">
+          <circle cx="118" cy="105" r="10" fill="#1a1a2e"/>
+          <circle cx="162" cy="105" r="10" fill="#1a1a2e"/>
+          <circle cx="122" cy="101" r="3.5" fill="#fff"/>
+          <circle cx="166" cy="101" r="3.5" fill="#fff"/>
+        </g>
+        <g class="fox-happy-eyes" style="display:none">
+          <path d="M108,105 Q118,95 128,105" stroke="#1a1a2e" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M152,105 Q162,95 172,105" stroke="#1a1a2e" stroke-width="3" fill="none" stroke-linecap="round"/>
+        </g>
+        <ellipse cx="140" cy="125" rx="6" ry="4" fill="#1a1a2e"/>
+        <path d="M132,132 Q140,140 148,132" stroke="#1a1a2e" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <circle cx="105" cy="120" r="8" fill="rgba(255,100,100,0.3)"/>
+        <circle cx="175" cy="120" r="8" fill="rgba(255,100,100,0.3)"/>
+        <ellipse cx="110" cy="240" rx="18" ry="12" fill="#ff6b35"/>
+        <ellipse cx="170" cy="240" rx="18" ry="12" fill="#ff6b35"/>
+        <g class="fox-tail">
+          <path d="M200,180 Q240,150 250,120 Q255,110 245,115 Q225,130 210,170" fill="#ff6b35"/>
+          <path d="M245,115 Q235,120 230,135 Q240,125 245,115" fill="#ffe0b2"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <div class="pet-counter" id="counter">Погладь лису! 🐾</div>
+</div>
+
+<!-- Platform selection screen -->
+<div class="platform-screen" id="platformScreen">
+  <div class="platform-title">🦊 Фокси счастлив!</div>
+  <div class="platform-subtitle">Выбери свою платформу и получи<br>бесплатный VPN!</div>
+
+  <button class="platform-btn ios" onclick="openIOS()">
+    <span class="icon">🍎</span>
+    <span>iPhone / iPad</span>
+  </button>
+
+  <button class="platform-btn android" onclick="openAndroid()">
+    <span class="icon">🤖</span>
+    <span>Android</span>
+  </button>
+
+  <div class="promo-code" id="promoCode">
+    <div class="label">ТВОЙ ПРОМОКОД</div>
+    <div class="code">FOXY30</div>
+    <div class="hint">Введи в приложении после установки</div>
+  </div>
+
+  <button class="back-btn" onclick="goBack()">← Погладить ещё раз</button>
+</div>
+
+<div class="paw-prints">🐾 🐾 🐾 🐾 🐾</div>
+
+<script>
+  const tg = window.Telegram?.WebApp;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+    tg.setHeaderColor('#1a1a2e');
+    tg.setBackgroundColor('#1a1a2e');
+  }
+
+  const IOS_LINK = 'https://apps.apple.com/redeem?ctx=offercodes&id=6757646633&code=FOXY30';
+  const PLAY_STORE = 'https://play.google.com/store/apps/details?id=com.theholylabs.rock';
+
+  // i18n
+  const LANGS = {
+    ru: {
+      title: 'Бесплатный', brand: 'Foxy VPN',
+      subtitle: 'Погладь лису — получи VPN! 🐾',
+      pet: 'Погладь лису! 🐾',
+      msgs: ['Ещё! Фокси нравится! 🦊','Фокси мурлычет! 😻','Какие тёплые руки! 🐾','Фокси в восторге! ✨','Лучшие поглаживания! 💕'],
+      petsCount: 'поглаживаний',
+      happy: '🦊 Фокси счастлив!',
+      choose: 'Выбери свою платформу и получи<br>бесплатный VPN!',
+      ios: 'iPhone / iPad', android: 'Android',
+      promoLabel: 'ТВОЙ ПРОМОКОД', promoHint: 'Введи в приложении после установки',
+      back: '← Погладить ещё раз'
+    },
+    en: {
+      title: 'Free', brand: 'Foxy VPN',
+      subtitle: 'Pet the fox — get free VPN! 🐾',
+      pet: 'Pet the fox! 🐾',
+      msgs: ['More! Foxy loves it! 🦊','Foxy is purring! 😻','Such warm hands! 🐾','Foxy is thrilled! ✨','Best pets ever! 💕'],
+      petsCount: 'pets',
+      happy: '🦊 Foxy is happy!',
+      choose: 'Choose your platform and get<br>free VPN!',
+      ios: 'iPhone / iPad', android: 'Android',
+      promoLabel: 'YOUR PROMO CODE', promoHint: 'Enter in the app after installing',
+      back: '← Pet again'
+    },
+    es: {
+      title: 'Gratis', brand: 'Foxy VPN',
+      subtitle: '¡Acaricia al zorro — obtén VPN! 🐾',
+      pet: '¡Acaricia al zorro! 🐾',
+      msgs: ['¡Más! ¡A Foxy le encanta! 🦊','¡Foxy ronronea! 😻','¡Qué manos cálidas! 🐾','¡Foxy está encantado! ✨','¡Las mejores caricias! 💕'],
+      petsCount: 'caricias',
+      happy: '🦊 ¡Foxy está feliz!',
+      choose: 'Elige tu plataforma y obtén<br>¡VPN gratis!',
+      ios: 'iPhone / iPad', android: 'Android',
+      promoLabel: 'TU CÓDIGO PROMO', promoHint: 'Ingrésalo en la app después de instalar',
+      back: '← Acariciar otra vez'
+    },
+    fr: {
+      title: 'Gratuit', brand: 'Foxy VPN',
+      subtitle: 'Caresse le renard — obtiens un VPN ! 🐾',
+      pet: 'Caresse le renard ! 🐾',
+      msgs: ['Encore ! Foxy adore ! 🦊','Foxy ronronne ! 😻','Quelles mains chaudes ! 🐾','Foxy est ravi ! ✨','Les meilleures caresses ! 💕'],
+      petsCount: 'caresses',
+      happy: '🦊 Foxy est heureux !',
+      choose: 'Choisis ta plateforme et obtiens<br>un VPN gratuit !',
+      ios: 'iPhone / iPad', android: 'Android',
+      promoLabel: 'TON CODE PROMO', promoHint: "Entre-le dans l'appli après l'installation",
+      back: '← Caresser encore'
+    },
+    de: {
+      title: 'Kostenloses', brand: 'Foxy VPN',
+      subtitle: 'Streichle den Fuchs — hol dir VPN! 🐾',
+      pet: 'Streichle den Fuchs! 🐾',
+      msgs: ['Mehr! Foxy liebt es! 🦊','Foxy schnurrt! 😻','Solch warme Hände! 🐾','Foxy ist begeistert! ✨','Beste Streicheleinheiten! 💕'],
+      petsCount: 'Streicheleinheiten',
+      happy: '🦊 Foxy ist glücklich!',
+      choose: 'Wähle deine Plattform und hol dir<br>kostenloses VPN!',
+      ios: 'iPhone / iPad', android: 'Android',
+      promoLabel: 'DEIN PROMO-CODE', promoHint: 'Gib ihn nach der Installation in der App ein',
+      back: '← Nochmal streicheln'
+    },
+    pt: {
+      title: 'Grátis', brand: 'Foxy VPN',
+      subtitle: 'Acaricie a raposa — ganhe VPN! 🐾',
+      pet: 'Acaricie a raposa! 🐾',
+      msgs: ['Mais! Foxy adora! 🦊','Foxy está ronronando! 😻','Que mãos quentes! 🐾','Foxy está encantado! ✨','Melhores carinhos! 💕'],
+      petsCount: 'carinhos',
+      happy: '🦊 Foxy está feliz!',
+      choose: 'Escolha sua plataforma e ganhe<br>VPN grátis!',
+      ios: 'iPhone / iPad', android: 'Android',
+      promoLabel: 'SEU CÓDIGO PROMO', promoHint: 'Digite no app após instalar',
+      back: '← Acariciar de novo'
+    },
+    tr: {
+      title: 'Ücretsiz', brand: 'Foxy VPN',
+      subtitle: 'Tilkiyi sıvazla — VPN kazan! 🐾',
+      pet: 'Tilkiyi sıvazla! 🐾',
+      msgs: ['Daha! Foxy bayılıyor! 🦊','Foxy mırıldanıyor! 😻','Ne sıcak eller! 🐾','Foxy çok mutlu! ✨','En iyi okşamalar! 💕'],
+      petsCount: 'okşama',
+      happy: '🦊 Foxy mutlu!',
+      choose: 'Platformunu seç ve<br>ücretsiz VPN kazan!',
+      ios: 'iPhone / iPad', android: 'Android',
+      promoLabel: 'PROMO KODUN', promoHint: 'Yükledikten sonra uygulamaya gir',
+      back: '← Tekrar sıvazla'
+    },
+    ar: {
+      title: 'مجاني', brand: 'Foxy VPN',
+      subtitle: 'امسح الثعلب — احصل على VPN! 🐾',
+      pet: 'امسح الثعلب! 🐾',
+      msgs: ['المزيد! فوكسي يحب! 🦊','فوكسي يخرخر! 😻','يا لها من أيدٍ دافئة! 🐾','فوكسي مسرور! ✨','أفضل مسحات! 💕'],
+      petsCount: 'مسحات',
+      happy: '🦊 فوكسي سعيد!',
+      choose: 'اختر منصتك واحصل على<br>VPN مجاني!',
+      ios: 'iPhone / iPad', android: 'Android',
+      promoLabel: 'رمزك الترويجي', promoHint: 'أدخله في التطبيق بعد التثبيت',
+      back: '← امسح مرة أخرى'
+    },
+    he: {
+      title: 'חינמי', brand: 'Foxy VPN',
+      subtitle: 'ליטף את השועל — קבל VPN! 🐾',
+      pet: 'ליטף את השועל! 🐾',
+      msgs: ['עוד! פוקסי אוהב! 🦊','פוקסי מרמרם! 😻','איזה ידיים חמות! 🐾','פוקסי מתרגש! ✨','הליטופים הכי טובים! 💕'],
+      petsCount: 'ליטופים',
+      happy: '🦊 פוקסי שמח!',
+      choose: 'בחר פלטפורמה וקבל<br>VPN חינמי!',
+      ios: 'iPhone / iPad', android: 'Android',
+      promoLabel: 'קוד הפרומו שלך', promoHint: 'הזן באפליקציה אחרי ההתקנה',
+      back: '← ליטף שוב'
+    }
+  };
+
+  function detectLang() {
+    // Telegram language first
+    const tgLang = tg?.initDataUnsafe?.user?.language_code;
+    const lang = (tgLang || navigator.language || 'en').slice(0, 2).toLowerCase();
+    return LANGS[lang] ? lang : 'en';
+  }
+
+  const lang = detectLang();
+  const t = LANGS[lang];
+
+  // Apply translations
+  document.querySelector('.title').innerHTML = `${t.title} <span>${t.brand}</span>`;
+  document.querySelector('.subtitle').textContent = t.subtitle;
+  document.getElementById('counter').textContent = t.pet;
+  document.querySelector('.platform-title').textContent = t.happy;
+  document.querySelector('.platform-subtitle').innerHTML = t.choose;
+  document.querySelector('.platform-btn.ios span:last-child').textContent = t.ios;
+  document.querySelector('.platform-btn.android span:last-child').textContent = t.android;
+  document.querySelector('.promo-code .label').textContent = t.promoLabel;
+  document.querySelector('.promo-code .hint').textContent = t.promoHint;
+  document.querySelector('.back-btn').textContent = t.back;
+
+  // RTL for Arabic/Hebrew
+  if (['ar','he'].includes(lang)) document.body.style.direction = 'rtl';
+
+  let petCount = 0;
+  const foxContainer = document.getElementById('foxContainer');
+  const counter = document.getElementById('counter');
+  const foxScreen = document.getElementById('foxScreen');
+  const platformScreen = document.getElementById('platformScreen');
+  const promoCode = document.getElementById('promoCode');
+  const foxEyes = document.querySelector('.fox-eyes');
+  const foxHappyEyes = document.querySelector('.fox-happy-eyes');
+  const emojis = ['❤️', '🧡', '💛', '🐾', '✨', '💕'];
+
+  foxContainer.addEventListener('click', (e) => {
+    petCount++;
+
+    foxContainer.classList.remove('happy');
+    void foxContainer.offsetWidth;
+    foxContainer.classList.add('happy');
+
+    foxEyes.style.display = 'none';
+    foxHappyEyes.style.display = 'block';
+    setTimeout(() => {
+      foxEyes.style.display = 'block';
+      foxHappyEyes.style.display = 'none';
+    }, 800);
+
+    for (let i = 0; i < 3; i++) setTimeout(() => spawnHeart(), i * 100);
+    for (let i = 0; i < 5; i++) spawnSparkle();
+
+    if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+
+    counter.textContent = t.msgs[Math.min(petCount - 1, t.msgs.length - 1)];
+
+    if (petCount >= 3) {
+      setTimeout(() => showPlatforms(), 600);
+    }
+  });
+
+  function showPlatforms() {
+    const ua = navigator.userAgent || '';
+    const isIOS = /iPhone|iPad|iPod/i.test(ua);
+    const isAndroid = /Android/i.test(ua);
+
+    if (isIOS) {
+      openIOS();
+      return;
+    }
+    if (isAndroid) {
+      openAndroid();
+      return;
+    }
+    // Desktop/unknown — show choice
+    foxScreen.classList.add('hidden');
+    platformScreen.classList.add('visible');
+  }
+
+  function goBack() {
+    platformScreen.classList.remove('visible');
+    promoCode.classList.remove('visible');
+    foxScreen.classList.remove('hidden');
+    petCount = 0;
+    counter.textContent = 'Погладь лису! 🐾';
+  }
+
+  function openIOS() {
+    if (tg) {
+      tg.openLink(IOS_LINK);
+    } else {
+      window.open(IOS_LINK, '_blank');
+    }
+  }
+
+  function openAndroid() {
+    promoCode.classList.add('visible');
+    if (tg) {
+      tg.openLink(PLAY_STORE);
+    } else {
+      window.open(PLAY_STORE, '_blank');
+    }
+  }
+
+  function spawnHeart() {
+    const heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    heart.style.left = (Math.random() * 200 + 40) + 'px';
+    heart.style.top = (Math.random() * 100 + 50) + 'px';
+    foxContainer.appendChild(heart);
+    setTimeout(() => heart.remove(), 1000);
+  }
+
+  function spawnSparkle() {
+    const sparkle = document.createElement('div');
+    sparkle.className = 'sparkle';
+    sparkle.style.left = (Math.random() * 240 + 20) + 'px';
+    sparkle.style.top = (Math.random() * 200 + 40) + 'px';
+    sparkle.style.background = ['#ffcc00','#ff6b35','#fff','#ff8c42'][Math.floor(Math.random() * 4)];
+    foxContainer.appendChild(sparkle);
+    setTimeout(() => sparkle.remove(), 800);
+  }
+</script>
+
+</body>
+</html>
