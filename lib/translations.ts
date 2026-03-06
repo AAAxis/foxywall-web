@@ -1,19 +1,36 @@
-export type Language = "en" | "hi" | "zh" | "ru" | "fr" | "de" | "es" | "pt" | "it" | "tr" | "ar"
+export type Language =
+  | "ar"
+  | "de"
+  | "en"
+  | "es"
+  | "fr"
+  | "he"
+  | "id"
+  | "ja"
+  | "pt-BR"
+  | "ru"
+  | "tr"
+  | "uk"
+  | "vi"
+  | "zh-Hans"
 
 export const defaultLanguage: Language = "en"
 
 export const languages = [
+  { code: "ar" as Language, name: "Arabic", flag: "🇸🇦" },
+  { code: "de" as Language, name: "German", flag: "🇩🇪" },
   { code: "en" as Language, name: "English", flag: "🇬🇧" },
-  { code: "hi" as Language, name: "हिन्दी", flag: "🇮🇳" },
-  { code: "zh" as Language, name: "中文", flag: "🇨🇳" },
-  { code: "ru" as Language, name: "Русский", flag: "🇷🇺" },
-  { code: "fr" as Language, name: "Français", flag: "🇫🇷" },
-  { code: "de" as Language, name: "Deutsch", flag: "🇩🇪" },
-  { code: "es" as Language, name: "Español", flag: "🇪🇸" },
-  { code: "pt" as Language, name: "Português", flag: "🇧🇷" },
-  { code: "it" as Language, name: "Italiano", flag: "🇮🇹" },
-  { code: "tr" as Language, name: "Türkçe", flag: "🇹🇷" },
-  { code: "ar" as Language, name: "العربية", flag: "🇸🇦" },
+  { code: "es" as Language, name: "Spanish", flag: "🇪🇸" },
+  { code: "fr" as Language, name: "French", flag: "🇫🇷" },
+  { code: "he" as Language, name: "Hebrew", flag: "🇮🇱" },
+  { code: "id" as Language, name: "Indonesian", flag: "🇮🇩" },
+  { code: "ja" as Language, name: "Japanese", flag: "🇯🇵" },
+  { code: "pt-BR" as Language, name: "Portuguese (Brazil)", flag: "🇧🇷" },
+  { code: "ru" as Language, name: "Russian", flag: "🇷🇺" },
+  { code: "tr" as Language, name: "Turkish", flag: "🇹🇷" },
+  { code: "uk" as Language, name: "Ukrainian", flag: "🇺🇦" },
+  { code: "vi" as Language, name: "Vietnamese", flag: "🇻🇳" },
+  { code: "zh-Hans" as Language, name: "Chinese Simplified", flag: "🇨🇳" },
 ]
 
 export const translations = {
@@ -176,7 +193,7 @@ export const translations = {
     terms: "शर्तें",
     allRightsReserved: "सर्वाधिकार सुरक्षित।",
   },
-  zh: {
+  "zh-Hans": {
     // Header
     features: "功能",
     pricing: "价格",
@@ -576,7 +593,7 @@ export const translations = {
     terms: "Términos",
     allRightsReserved: "Todos los derechos reservados.",
   },
-  pt: {
+  "pt-BR": {
     // Header
     features: "Recursos",
     pricing: "Preços",
@@ -656,34 +673,17 @@ export const translations = {
     terms: "Termos",
     allRightsReserved: "Todos os direitos reservados.",
   },
-  it: {
-    language: "Lingua",
+  he: {
+    language: "שפה",
+    blog: "בלוג",
+  },
+  id: {
+    language: "Bahasa",
     blog: "Blog",
-    serversCount: "200+ Server",
-    featuresSectionTitle: "Funzionalità",
-    featuresSectionSubtitle: "Massima sicurezza",
-    featuresSectionDescription: "Tutto ciò che ti serve per una navigazione sicura e privata.",
-    downloadsLabel: "Download",
-    serversLabel: "Server",
-    uptimeLabel: "Uptime",
-    logsStoredLabel: "Log salvati",
-    pricingSectionTitle: "Prezzi",
-    perkUnlimitedBandwidth: "Banda illimitata",
-    perkAllServerLocations: "Tutte le posizioni server",
-    perkNoLogsPolicy: "Politica no-log",
-    perk24_7Support: "Supporto 24/7",
-    perkKillSwitch: "Kill switch",
-    perkMultiDevice: "Multi-dispositivo",
-    blogDescription: "Consigli di sicurezza, guide privacy e approfondimenti VPN.",
-    searchPostsPlaceholder: "Cerca articoli...",
-    loadingPosts: "Caricamento articoli...",
-    noPostsFound: "Nessun articolo trovato.",
-    allCategories: "Tutti",
-    readTimeSuffix: "min di lettura",
-    loading: "Caricamento...",
-    postNotFound: "Articolo non trovato",
-    backToBlog: "Torna al blog",
-    by: "Di",
+  },
+  ja: {
+    language: "言語",
+    blog: "ブログ",
   },
   tr: {
     language: "Dil",
@@ -713,6 +713,14 @@ export const translations = {
     postNotFound: "Yazi bulunamadi",
     backToBlog: "Bloga don",
     by: "Yazar",
+  },
+  uk: {
+    language: "Мова",
+    blog: "Блог",
+  },
+  vi: {
+    language: "Ngon ngu",
+    blog: "Blog",
   },
   ar: {
     language: "اللغة",
