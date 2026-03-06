@@ -28,12 +28,12 @@ export function Pricing() {
   ]
 
   const perks = [
-    "Unlimited bandwidth",
-    "All server locations",
-    "No-logs policy",
-    "24/7 support",
-    "Kill switch",
-    "Multi-device",
+    t("perkUnlimitedBandwidth"),
+    t("perkAllServerLocations"),
+    t("perkNoLogsPolicy"),
+    t("perk24_7Support"),
+    t("perkKillSwitch"),
+    t("perkMultiDevice"),
   ]
 
   return (
@@ -48,7 +48,7 @@ export function Pricing() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="inline-block text-sm font-semibold text-primary uppercase tracking-wider mb-3">Pricing</span>
+          <span className="inline-block text-sm font-semibold text-primary uppercase tracking-wider mb-3">{t("pricingSectionTitle")}</span>
           <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4">{t("fairPricing")}</h2>
           <p className="text-muted-foreground text-lg max-w-lg mx-auto">{t("pricingDescription")}</p>
         </motion.div>

@@ -1,22 +1,6 @@
-"use client"
+import { redirect } from "next/navigation"
+import { defaultLanguage } from "@/lib/translations"
 
-import { LanguageProvider } from "@/lib/language-context"
-import { Header } from "@/components/header"
-import { Hero } from "@/components/hero"
-import { Features } from "@/components/features"
-import { Pricing } from "@/components/pricing"
-import { Footer } from "@/components/footer"
-
-export default function Home() {
-  return (
-    <LanguageProvider>
-      <main className="min-h-screen bg-background">
-        <Header />
-        <Hero />
-        <Features />
-        <Pricing />
-        <Footer />
-      </main>
-    </LanguageProvider>
-  )
+export default function Page() {
+  redirect(`/${defaultLanguage}`)
 }

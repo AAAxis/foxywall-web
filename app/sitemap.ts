@@ -1,14 +1,11 @@
 import { MetadataRoute } from 'next';
+import { languages } from '@/lib/translations';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://www.foxywall.xyz';
 
-  const routes = [
-    '',
-    '/privacy-policy',
-    '/terms-of-service',
-    '/refund-policy',
-  ];
+  const localeRoutes = languages.flatMap(({ code }) => [`/${code}`, `/${code}/blog`, `/${code}/refer`]);
+  const routes = [...localeRoutes, '/privacy-policy', '/terms-of-service', '/refund-policy'];
 
   return routes.map((route) => ({
     url: `${baseUrl}${route}`,
