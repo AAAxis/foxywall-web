@@ -1,80 +1,15 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { getSupabase } from "@/lib/supabase"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { LanguageProvider, useLanguage } from "@/lib/language-context"
 import type { Language } from "@/lib/translations"
+import type { BlogPost } from "@/lib/blog-posts"
 
-interface BlogPost {
-  id: string
-  title: string
-  slug: string
-  content: string
-  excerpt: string
-  featured_image: string
-  category: string
-  author: string
-  published_at: string
-  read_time: number
-  tags: string[]
-}
-
-function BlogPostContent({ slug }: { slug: string }) {
+function BlogPostContent({ post }: { post: BlogPost }) {
   const { language, t } = useLanguage()
-  const [post, setPost] = useState<BlogPost | null>(null)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    async function fetchPost() {
-      setLoading(true)
-      setPost(null)
-
-      const { data, error } = await getSupabase()
-        .from("blog_posts")
-        .select("*")
-        .eq("slug", slug)
-        .eq("status", "published")
-        .eq("brand", "vpn")
-        .eq("language", language)
-        .maybeSingle()
-
-      if (!error && data) setPost(data)
-      setLoading(false)
-    }
-
-    if (slug) fetchPost()
-  }, [slug, language])
-
-  if (loading) {
-    return (
-      <main className="min-h-screen bg-background">
-        <Header />
-        <div className="pt-28 pb-16 container mx-auto px-6">
-          <p className="text-muted-foreground">{t("loading")}</p>
-        </div>
-        <Footer />
-      </main>
-    )
-  }
-
-  if (!post) {
-    return (
-      <main className="min-h-screen bg-background">
-        <Header />
-        <div className="pt-28 pb-16 container mx-auto px-6 text-center">
-          <h1 className="text-3xl font-bold text-foreground mb-4">{t("postNotFound")}</h1>
-          <Link href={`/${language}/blog`} className="text-primary hover:underline">
-            ← {t("backToBlog")}
-          </Link>
-        </div>
-        <Footer />
-      </main>
-    )
-  }
 
   return (
     <main className="min-h-screen bg-background">
@@ -134,10 +69,10 @@ function BlogPostContent({ slug }: { slug: string }) {
   )
 }
 
-export function BlogPostPage({ initialLanguage, slug }: { initialLanguage: Language; slug: string }) {
+export function BlogPostPage({ initialLanguage, post }: { initialLanguage: Language; post: BlogPost }) {
   return (
     <LanguageProvider initialLanguage={initialLanguage}>
-      <BlogPostContent slug={slug} />
+      <BlogPostContent post={post} />
     </LanguageProvider>
   )
 }

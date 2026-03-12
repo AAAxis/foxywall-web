@@ -1,50 +1,19 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { getSupabase } from "@/lib/supabase"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { LanguageProvider, useLanguage } from "@/lib/language-context"
 import type { Language } from "@/lib/translations"
+import type { BlogListItem } from "@/lib/blog-posts"
 
-interface BlogPost {
-  id: string
-  title: string
-  slug: string
-  excerpt: string
-  featured_image: string
-  category: string
-  published_at: string
-  read_time: number
-  language: string
-  brand: string
-}
-
-function BlogContent() {
+function BlogContent({ posts }: { posts: BlogListItem[] }) {
   const { language, t } = useLanguage()
   const allCategoryValue = "__all__"
-  const [posts, setPosts] = useState<BlogPost[]>([])
-  const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
   const [category, setCategory] = useState(allCategoryValue)
-
-  useEffect(() => {
-    async function fetchPosts() {
-      const { data, error } = await getSupabase()
-        .from("blog_posts")
-        .select("id, title, slug, excerpt, featured_image, category, published_at, read_time, language, brand")
-        .eq("status", "published")
-        .eq("brand", "vpn")
-        .eq("language", language)
-        .order("published_at", { ascending: false })
-
-      if (!error && data) setPosts(data)
-      setLoading(false)
-    }
-    fetchPosts()
-  }, [language])
 
   const categories = [allCategoryValue, ...new Set(posts.map((p) => p.category).filter(Boolean))]
 
@@ -82,9 +51,7 @@ function BlogContent() {
           </select>
         </div>
 
-        {loading ? (
-          <p className="text-muted-foreground">{t("loadingPosts")}</p>
-        ) : filtered.length === 0 ? (
+        {filtered.length === 0 ? (
           <p className="text-muted-foreground">{t("noPostsFound")}</p>
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -127,10 +94,10 @@ function BlogContent() {
   )
 }
 
-export function BlogPage({ initialLanguage }: { initialLanguage: Language }) {
+export function BlogPage({ initialLanguage, posts }: { initialLanguage: Language; posts: BlogListItem[] }) {
   return (
     <LanguageProvider initialLanguage={initialLanguage}>
-      <BlogContent />
+      <BlogContent posts={posts} />
     </LanguageProvider>
   )
 }
