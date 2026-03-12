@@ -3,7 +3,6 @@
 import { Header } from "@/components/header"
 import { Hero } from "@/components/hero"
 import { Features } from "@/components/features"
-import { PromoBanner } from "@/components/promo-banner"
 import { Pricing } from "@/components/pricing"
 import { Footer } from "@/components/footer"
 import { LanguageProvider } from "@/lib/language-context"
@@ -15,7 +14,6 @@ export function HomePage({ initialLanguage }: { initialLanguage: Language }) {
       <main className="min-h-screen bg-background">
         <Header />
         <Hero />
-        <PromoBanner />
         <Features />
         <Pricing />
         <Footer />
