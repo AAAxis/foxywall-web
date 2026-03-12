@@ -30,14 +30,24 @@ function BlogPostContent({ slug }: { slug: string }) {
 
   useEffect(() => {
     async function fetchPost() {
-      const { data, error } = await getSupabase().from("blog_posts").select("*").eq("slug", slug).eq("status", "published").single()
+      setLoading(true)
+      setPost(null)
+
+      const { data, error } = await getSupabase()
+        .from("blog_posts")
+        .select("*")
+        .eq("slug", slug)
+        .eq("status", "published")
+        .eq("brand", "vpn")
+        .eq("language", language)
+        .maybeSingle()
 
       if (!error && data) setPost(data)
       setLoading(false)
     }
 
     if (slug) fetchPost()
-  }, [slug])
+  }, [slug, language])
 
   if (loading) {
     return (
