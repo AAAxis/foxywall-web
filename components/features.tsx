@@ -30,13 +30,9 @@ export function Features() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="inline-block text-sm font-semibold text-primary uppercase tracking-wider mb-3">Features</span>
-          <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4">
-            Maximum Security
-          </h2>
-          <p className="text-muted-foreground text-lg max-w-lg mx-auto">
-            Everything you need for secure, private browsing — built for speed.
-          </p>
+          <span className="inline-block text-sm font-semibold text-primary uppercase tracking-wider mb-3">{t("featuresSectionTitle")}</span>
+          <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4">{t("featuresSectionSubtitle")}</h2>
+          <p className="text-muted-foreground text-lg max-w-lg mx-auto">{t("featuresSectionDescription")}</p>
         </motion.div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-6xl mx-auto">
@@ -68,10 +64,10 @@ export function Features() {
           className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto"
         >
           {[
-            { value: "5M+", label: "Downloads" },
-            { value: "200+", label: "Servers" },
-            { value: "99.9%", label: "Uptime" },
-            { value: "0", label: "Logs stored" },
+            { value: "5M+", label: t("downloadsLabel") },
+            { value: "200+", label: t("serversLabel") },
+            { value: "99.9%", label: t("uptimeLabel") },
+            { value: "0", label: t("logsStoredLabel") },
           ].map((stat, i) => (
             <motion.div
               key={i}

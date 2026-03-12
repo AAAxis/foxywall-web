@@ -5,7 +5,7 @@ import Image from "next/image"
 import { useLanguage } from "@/lib/language-context"
 
 export function Footer() {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
 
   return (
     <footer className="border-t border-border py-12 bg-background">
@@ -23,9 +23,9 @@ export function Footer() {
           </div>
 
           <div className="flex flex-wrap gap-6 text-sm">
-            <Link href="#features" className="text-muted-foreground hover:text-foreground transition-colors">{t("features")}</Link>
-            <Link href="#pricing" className="text-muted-foreground hover:text-foreground transition-colors">{t("pricing")}</Link>
-            <Link href="/blog" className="text-muted-foreground hover:text-foreground transition-colors">Blog</Link>
+            <Link href={`/${language}#features`} className="text-muted-foreground hover:text-foreground transition-colors">{t("features")}</Link>
+            <Link href={`/${language}#pricing`} className="text-muted-foreground hover:text-foreground transition-colors">{t("pricing")}</Link>
+            <Link href={`/${language}/blog`} className="text-muted-foreground hover:text-foreground transition-colors">{t("blog")}</Link>
             <Link href="https://holylabs.net/privacy" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">{t("privacyPolicy")}</Link>
             <Link href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">{t("terms")}</Link>
           </div>
