@@ -6,14 +6,14 @@ import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { LanguageProvider, useLanguage } from "@/lib/language-context"
 import type { Language } from "@/lib/translations"
-import type { BlogPost } from "@/lib/blog-posts"
+import type { BlogPost, BlogPostLanguagePaths } from "@/lib/blog-posts"
 
-function BlogPostContent({ post }: { post: BlogPost }) {
+function BlogPostContent({ post, languagePathOverrides }: { post: BlogPost; languagePathOverrides?: BlogPostLanguagePaths }) {
   const { language, t } = useLanguage()
 
   return (
     <main className="min-h-screen bg-background">
-      <Header />
+      <Header languagePathOverrides={languagePathOverrides} />
       <article className="pt-28 pb-16 container mx-auto px-6">
         <div className="max-w-3xl mx-auto">
           <Link href={`/${language}/blog`} className="text-sm text-muted-foreground hover:text-primary transition-colors mb-6 inline-block">
@@ -69,10 +69,18 @@ function BlogPostContent({ post }: { post: BlogPost }) {
   )
 }
 
-export function BlogPostPage({ initialLanguage, post }: { initialLanguage: Language; post: BlogPost }) {
+export function BlogPostPage({
+  initialLanguage,
+  post,
+  languagePathOverrides,
+}: {
+  initialLanguage: Language
+  post: BlogPost
+  languagePathOverrides?: BlogPostLanguagePaths
+}) {
   return (
     <LanguageProvider initialLanguage={initialLanguage}>
-      <BlogPostContent post={post} />
+      <BlogPostContent post={post} languagePathOverrides={languagePathOverrides} />
     </LanguageProvider>
   )
 }

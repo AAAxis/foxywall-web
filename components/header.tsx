@@ -10,8 +10,10 @@ import { useLanguage } from "@/lib/language-context"
 import { getStoreUrl } from "@/lib/device-utils"
 import { usePathname, useRouter } from "next/navigation"
 import { replaceLocaleInPathname } from "@/lib/i18n-routing"
+import type { Language } from "@/lib/translations"
+import type { BlogPostLanguagePaths } from "@/lib/blog-posts"
 
-export function Header() {
+export function Header({ languagePathOverrides }: { languagePathOverrides?: BlogPostLanguagePaths }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { language, setLanguage, t, languages } = useLanguage()
   const pathname = usePathname()
@@ -23,9 +25,13 @@ export function Header() {
     window.open(url, "_blank", "noopener,noreferrer")
   }
 
+  const getNextPath = (nextLanguage: Language) => {
+    return languagePathOverrides?.[nextLanguage] ?? replaceLocaleInPathname(pathname, nextLanguage)
+  }
+
   const handleLanguageChange = (nextLanguage: typeof language) => {
     setLanguage(nextLanguage)
-    router.push(replaceLocaleInPathname(pathname, nextLanguage))
+    router.push(getNextPath(nextLanguage))
   }
 
   return (

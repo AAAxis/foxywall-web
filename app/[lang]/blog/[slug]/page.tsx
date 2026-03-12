@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation"
 import { BlogPostPage } from "@/components/pages/blog-post-page"
 import { isLanguage } from "@/lib/i18n-routing"
-import { getPublishedBlogPostBySlug } from "@/lib/blog-posts"
+import { getBlogPostLanguagePaths, getPublishedBlogPostBySlug } from "@/lib/blog-posts"
 
 export const dynamic = "force-dynamic"
 
@@ -18,5 +18,7 @@ export default async function LocalizedBlogPostPage({ params }: { params: Promis
     notFound()
   }
 
-  return <BlogPostPage initialLanguage={lang} post={post} />
+  const languagePathOverrides = await getBlogPostLanguagePaths(post)
+
+  return <BlogPostPage initialLanguage={lang} post={post} languagePathOverrides={languagePathOverrides} />
 }

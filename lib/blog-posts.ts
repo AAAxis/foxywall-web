@@ -31,6 +31,8 @@ export type BlogPost = {
   brand: string
 }
 
+export type BlogPostLanguagePaths = Partial<Record<Language, string>>
+
 function getServerSupabase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -104,4 +106,29 @@ export async function getPublishedBlogPostBySlug(language: Language, slug: strin
   }
 
   return anyLanguageData
+}
+
+export async function getBlogPostLanguagePaths(post: Pick<BlogPost, "published_at">): Promise<BlogPostLanguagePaths> {
+  const supabase = getServerSupabase()
+  const { data, error } = await supabase
+    .from("blog_posts")
+    .select("language, slug")
+    .eq("status", "published")
+    .eq("brand", "vpn")
+    .eq("published_at", post.published_at)
+
+  if (error || !data) {
+    return {}
+  }
+
+  return data.reduce<BlogPostLanguagePaths>((paths, item) => {
+    const language = item.language as Language
+
+    if (!item.slug || !item.language) {
+      return paths
+    }
+
+    paths[language] = `/${language}/blog/${item.slug}`
+    return paths
+  }, {})
 }
