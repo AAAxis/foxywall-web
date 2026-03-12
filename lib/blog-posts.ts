@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js"
+import { defaultLanguage } from "@/lib/translations"
 import type { Language } from "@/lib/translations"
 
 export type BlogListItem = {
@@ -60,6 +61,7 @@ export async function getPublishedBlogPosts(language: Language): Promise<BlogLis
 
 export async function getPublishedBlogPostBySlug(language: Language, slug: string): Promise<BlogPost | null> {
   const supabase = getServerSupabase()
+
   const { data, error } = await supabase
     .from("blog_posts")
     .select("*")
@@ -69,9 +71,37 @@ export async function getPublishedBlogPostBySlug(language: Language, slug: strin
     .eq("language", language)
     .maybeSingle()
 
-  if (error || !data) {
+  if (!error && data) {
+    return data
+  }
+
+  if (language !== defaultLanguage) {
+    const { data: fallbackData, error: fallbackError } = await supabase
+      .from("blog_posts")
+      .select("*")
+      .eq("slug", slug)
+      .eq("status", "published")
+      .eq("brand", "vpn")
+      .eq("language", defaultLanguage)
+      .maybeSingle()
+
+    if (!fallbackError && fallbackData) {
+      return fallbackData
+    }
+  }
+
+  const { data: anyLanguageData, error: anyLanguageError } = await supabase
+    .from("blog_posts")
+    .select("*")
+    .eq("slug", slug)
+    .eq("status", "published")
+    .eq("brand", "vpn")
+    .limit(1)
+    .maybeSingle()
+
+  if (anyLanguageError || !anyLanguageData) {
     return null
   }
 
-  return data
+  return anyLanguageData
 }
