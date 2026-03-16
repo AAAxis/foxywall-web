@@ -29,9 +29,23 @@ function BlogPostContent({ post, languagePathOverrides }: { post: BlogPost; lang
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4 leading-tight">{post.title}</h1>
 
           <div className="flex items-center gap-4 text-sm text-muted-foreground mb-8">
-            {post.author && <span>{t("by")} {post.author}</span>}
+            {post.author_image && (
+              <Image src={post.author_image} alt={post.author || ''} width={40} height={40} className="rounded-full" />
+            )}
+            <div>
+              {post.author && (
+                post.author_linkedin ? (
+                  <a href={post.author_linkedin} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">
+                    {post.author}
+                  </a>
+                ) : (
+                  <span className="font-medium text-foreground">{post.author}</span>
+                )
+              )}
+              {post.author_bio && <p className="text-xs text-muted-foreground">{post.author_bio}</p>}
+            </div>
             {post.published_at && (
-              <span>{new Date(post.published_at).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</span>
+              <span className="ml-auto">{new Date(post.published_at).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</span>
             )}
             {post.read_time && <span>{post.read_time} {t("readTimeSuffix")}</span>}
           </div>
@@ -49,7 +63,10 @@ function BlogPostContent({ post, languagePathOverrides }: { post: BlogPost; lang
                 prose-code:bg-secondary prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
                 prose-pre:bg-secondary prose-pre:border prose-pre:border-border
                 prose-blockquote:border-primary prose-blockquote:text-muted-foreground
-                prose-img:rounded-xl"
+                prose-img:rounded-xl
+                prose-table:border-collapse prose-table:w-full prose-table:border prose-table:border-border
+                prose-th:border prose-th:border-border prose-th:bg-secondary prose-th:px-4 prose-th:py-2 prose-th:text-left prose-th:text-foreground prose-th:font-semibold
+                prose-td:border prose-td:border-border prose-td:px-4 prose-td:py-2 prose-td:text-muted-foreground"
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
 

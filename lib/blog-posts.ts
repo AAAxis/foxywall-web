@@ -24,6 +24,9 @@ export type BlogPost = {
   featured_image: string
   category: string
   author: string
+  author_bio?: string
+  author_image?: string
+  author_linkedin?: string
   published_at: string
   read_time: number
   tags: string[]
