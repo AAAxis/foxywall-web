@@ -30,7 +30,7 @@ function BlogPostContent({ post, languagePathOverrides }: { post: BlogPost; lang
 
           <div className="flex items-center gap-4 text-sm text-muted-foreground mb-8">
             {post.author_image && (
-              <Image src={post.author_image} alt={post.author || ''} width={40} height={40} className="rounded-full" />
+              <img src={post.author_image} alt={post.author || ''} width={40} height={40} className="rounded-full" />
             )}
             <div>
               {post.author && (
