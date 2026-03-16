@@ -47,7 +47,7 @@ function BlogPostContent({ post, languagePathOverrides }: { post: BlogPost; lang
             {post.published_at && (
               <span className="ml-auto">{new Date(post.published_at).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</span>
             )}
-            {post.read_time && <span>{post.read_time} {t("readTimeSuffix")}</span>}
+            {post.read_time && <span>{post.read_time}</span>}
           </div>
 
           {post.featured_image && (
@@ -63,10 +63,7 @@ function BlogPostContent({ post, languagePathOverrides }: { post: BlogPost; lang
                 prose-code:bg-secondary prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
                 prose-pre:bg-secondary prose-pre:border prose-pre:border-border
                 prose-blockquote:border-primary prose-blockquote:text-muted-foreground
-                prose-img:rounded-xl
-                prose-table:border-collapse prose-table:w-full prose-table:border prose-table:border-border
-                prose-th:border prose-th:border-border prose-th:bg-secondary prose-th:px-4 prose-th:py-2 prose-th:text-left prose-th:text-foreground prose-th:font-semibold
-                prose-td:border prose-td:border-border prose-td:px-4 prose-td:py-2 prose-td:text-muted-foreground"
+                prose-img:rounded-xl"
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
 
