@@ -10,7 +10,7 @@
 This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
 Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
 
-Your project is live at:
+
 
 **[https://vercel.com/aaaxis-projects/v0-monti-vpn-website](https://vercel.com/aaaxis-projects/v0-monti-vpn-website)**
 
