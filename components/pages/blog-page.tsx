@@ -80,7 +80,7 @@ function BlogContent({ posts }: { posts: BlogListItem[] }) {
                     <p className="text-sm text-muted-foreground line-clamp-2 mb-3">{post.excerpt}</p>
                     <div className="flex items-center gap-3 text-xs text-muted-foreground">
                       {post.published_at && <span>{new Date(post.published_at).toLocaleDateString()}</span>}
-                      {post.read_time && <span>{post.read_time} {t("readTimeSuffix")}</span>}
+                      {post.read_time && <span>{post.read_time}</span>}
                     </div>
                   </div>
                 </div>
