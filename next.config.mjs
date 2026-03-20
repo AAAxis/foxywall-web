@@ -1,28 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   typescript: {
+    // TODO: Fix type errors and remove this flag
     ignoreBuildErrors: true,
   },
   images: {
-    unoptimized: true,
-  },
-  async headers() {
-    return [
+    // Enable Next.js image optimization for better Core Web Vitals
+    remotePatterns: [
       {
-        source: '/sitemap.xml',
-        headers: [
-          { key: 'Content-Type', value: 'application/xml' },
-          { key: 'Cache-Control', value: 'public, max-age=3600, s-maxage=3600' },
-        ],
+        protocol: 'https',
+        hostname: '**',
       },
-      {
-        source: '/robots.txt',
-        headers: [
-          { key: 'Content-Type', value: 'text/plain' },
-          { key: 'Cache-Control', value: 'public, max-age=3600, s-maxage=3600' },
-        ],
-      },
-    ];
+    ],
+    formats: ['image/webp', 'image/avif'],
   },
 }
 
