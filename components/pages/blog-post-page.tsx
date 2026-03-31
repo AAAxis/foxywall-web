@@ -16,12 +16,12 @@ function BlogPostContent({ post, languagePathOverrides }: { post: BlogPost; lang
       <Header languagePathOverrides={languagePathOverrides} />
       <article className="pt-28 pb-16 container mx-auto px-6">
         <div className="max-w-3xl mx-auto">
-          <Link href={`/${language}/blog`} className="text-sm text-muted-foreground hover:text-primary transition-colors mb-6 inline-block">
+          <Link href={`/${language}/blog`} className="text-sm text-muted-foreground hover:text-primary transition-colors mb-8 block">
             ← {t("backToBlog")}
           </Link>
 
           {post.category && (
-            <span className="inline-block bg-primary text-primary-foreground text-xs font-medium px-3 py-1 rounded-full mb-4">
+            <span className="inline-block bg-primary text-primary-foreground text-xs font-medium px-3 py-1 rounded-full mb-6">
               {post.category}
             </span>
           )}
