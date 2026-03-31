@@ -3,7 +3,12 @@
 import { Header } from "@/components/header"
 import { Hero } from "@/components/hero"
 import { Features } from "@/components/features"
+import { Comparison } from "@/components/comparison"
+import { WhoUses } from "@/components/who-uses"
+import { HowItWorks } from "@/components/how-it-works"
+import { PrivacyPromise } from "@/components/privacy-promise"
 import { Pricing } from "@/components/pricing"
+import { Faq } from "@/components/faq"
 import { BlogPreview } from "@/components/blog-preview"
 import { Footer } from "@/components/footer"
 import { LanguageProvider } from "@/lib/language-context"
@@ -17,8 +22,13 @@ export function HomePage({ initialLanguage, posts }: { initialLanguage: Language
         <Header />
         <Hero />
         <Features />
-        <BlogPreview posts={posts} />
+        <Comparison />
+        <WhoUses />
+        <PrivacyPromise />
+        <HowItWorks />
         <Pricing />
+        <Faq />
+        <BlogPreview posts={posts} />
         <Footer />
       </main>
     </LanguageProvider>

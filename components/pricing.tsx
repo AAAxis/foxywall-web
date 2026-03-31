@@ -6,27 +6,25 @@ import { Button } from "@/components/ui/button"
 import { Check, Sparkles } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
-const SUBSCRIBE_URL_RU = "https://globalbanka.roamjet.net/vpn"
-const SUBSCRIBE_URL_DEFAULT = "https://pay.rev.cat/pzcicgzdkqlwadcj/"
+const SUBSCRIBE_URL = "https://pay.rev.cat/pzcicgzdkqlwadcj/"
 
 export function Pricing() {
-  const { t, language } = useLanguage()
+  const { t } = useLanguage()
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
-  const subscribeUrl = language === "ru" ? SUBSCRIBE_URL_RU : SUBSCRIBE_URL_DEFAULT
+  const subscribeUrl = SUBSCRIBE_URL
 
-  const isRu = language === "ru"
   const plans = [
     {
       duration: t("oneMonth"),
-      price: isRu ? "₽399" : "$4.99",
-      perMonth: isRu ? "₽399/мес" : "$4.99/mo",
+      price: "$4.99",
+      perMonth: "$4.99/mo",
       popular: false,
     },
     {
       duration: t("oneYear"),
-      price: isRu ? "₽2 990" : "$39.99",
-      perMonth: isRu ? "₽249/мес" : "$3.33/mo",
+      price: "$39.99",
+      perMonth: "$3.33/mo",
       popular: true,
       savings: t("save33"),
     },
