@@ -4,8 +4,7 @@ import { languages, type Language } from "@/lib/translations"
 
 const BASE_URL = "https://www.foxywall.xyz"
 
-// Only include locales that actually have VPN blog content
-const BLOG_LOCALES: Language[] = ["en", "ar", "de", "es", "fr", "he", "pt-BR", "ru", "tr"]
+const BLOG_LOCALES: Language[] = ["en", "ru", "zh-Hans"]
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date()

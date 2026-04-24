@@ -11,9 +11,7 @@ export const revalidate = 3600
 const BASE_URL = "https://www.foxywall.xyz"
 
 const OG_LOCALE_MAP: Record<string, string> = {
-  en: "en_US", ar: "ar_SA", de: "de_DE", es: "es_ES",
-  fr: "fr_FR", he: "he_IL", ru: "ru_RU", "pt-BR": "pt_BR", tr: "tr_TR",
-  ja: "ja_JP", "zh-Hans": "zh_CN", id: "id_ID", uk: "uk_UA", vi: "vi_VN",
+  en: "en_US", ru: "ru_RU", "zh-Hans": "zh_CN",
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string; slug: string }> }): Promise<Metadata> {
