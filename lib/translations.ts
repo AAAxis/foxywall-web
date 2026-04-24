@@ -1,35 +1,10 @@
-export type Language =
-  | "ar"
-  | "de"
-  | "en"
-  | "es"
-  | "fr"
-  | "he"
-  | "id"
-  | "ja"
-  | "pt-BR"
-  | "ru"
-  | "tr"
-  | "uk"
-  | "vi"
-  | "zh-Hans"
+export type Language = "en" | "ru" | "zh-Hans"
 
 export const defaultLanguage: Language = "en"
 
 export const languages = [
-  { code: "ar" as Language, name: "Arabic", flag: "🇸🇦" },
-  { code: "de" as Language, name: "German", flag: "🇩🇪" },
   { code: "en" as Language, name: "English", flag: "🇬🇧" },
-  { code: "es" as Language, name: "Spanish", flag: "🇪🇸" },
-  { code: "fr" as Language, name: "French", flag: "🇫🇷" },
-  { code: "he" as Language, name: "Hebrew", flag: "🇮🇱" },
-  { code: "id" as Language, name: "Indonesian", flag: "🇮🇩" },
-  { code: "ja" as Language, name: "Japanese", flag: "🇯🇵" },
-  { code: "pt-BR" as Language, name: "Portuguese (Brazil)", flag: "🇧🇷" },
   { code: "ru" as Language, name: "Russian", flag: "🇷🇺" },
-  { code: "tr" as Language, name: "Turkish", flag: "🇹🇷" },
-  { code: "uk" as Language, name: "Ukrainian", flag: "🇺🇦" },
-  { code: "vi" as Language, name: "Vietnamese", flag: "🇻🇳" },
   { code: "zh-Hans" as Language, name: "Chinese Simplified", flag: "🇨🇳" },
 ]
 
