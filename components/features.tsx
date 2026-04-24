@@ -11,14 +11,14 @@ export function Features() {
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
   const features = [
-    { icon: Shield, text: t("feature1"), color: "from-orange-500 to-amber-500" },
-    { icon: Users, text: t("feature2"), color: "from-blue-500 to-cyan-500" },
-    { icon: Globe, text: t("feature3"), color: "from-purple-500 to-pink-500" },
-    { icon: Wifi, text: t("feature4"), color: "from-green-500 to-emerald-500" },
-    { icon: Lock, text: t("feature5"), color: "from-red-500 to-orange-500" },
-    { icon: Zap, text: t("feature6"), color: "from-yellow-500 to-amber-500" },
-    { icon: Eye, text: t("feature7"), color: "from-indigo-500 to-blue-500" },
-    { icon: Server, text: t("feature8"), color: "from-teal-500 to-cyan-500" },
+    { icon: Shield, text: t("feature1") },
+    { icon: Users, text: t("feature2") },
+    { icon: Globe, text: t("feature3") },
+    { icon: Wifi, text: t("feature4") },
+    { icon: Lock, text: t("feature5") },
+    { icon: Zap, text: t("feature6") },
+    { icon: Eye, text: t("feature7") },
+    { icon: Server, text: t("feature8") },
   ]
 
   return (
@@ -42,16 +42,12 @@ export function Features() {
               initial={{ opacity: 0, y: 40 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: index * 0.08 }}
-              whileHover={{ y: -8, transition: { duration: 0.2 } }}
-              className="group relative bg-background border border-border rounded-2xl p-6 hover:shadow-xl hover:shadow-primary/5 hover:border-primary/30 transition-all cursor-default overflow-hidden"
+              className="bg-card border border-border rounded-xl p-6 hover:border-foreground/20 transition-colors"
             >
-              {/* Gradient glow on hover */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-[0.03] transition-opacity duration-300`} />
-
-              <div className={`relative w-12 h-12 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                <feature.icon className="w-6 h-6 text-white" />
+              <div className="w-10 h-10 rounded-lg border border-border flex items-center justify-center mb-4">
+                <feature.icon className="w-5 h-5 text-primary" />
               </div>
-              <p className="relative text-foreground font-medium leading-relaxed">{feature.text}</p>
+              <p className="text-foreground leading-relaxed">{feature.text}</p>
             </motion.div>
           ))}
         </div>
@@ -69,16 +65,15 @@ export function Features() {
             { value: "99.9%", label: t("uptimeLabel") },
             { value: "0", label: t("logsStoredLabel") },
           ].map((stat, i) => (
-            <motion.div
+            <div
               key={i}
-              whileHover={{ scale: 1.05 }}
-              className="text-center p-6 rounded-2xl bg-secondary/50 border border-border"
+              className="text-center p-6 rounded-xl border border-border"
             >
-              <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent mb-1">
+              <div className="text-3xl md:text-4xl font-semibold text-foreground mb-1 tabular-nums">
                 {stat.value}
               </div>
-              <div className="text-sm text-muted-foreground font-medium">{stat.label}</div>
-            </motion.div>
+              <div className="text-sm text-muted-foreground">{stat.label}</div>
+            </div>
           ))}
         </motion.div>
       </div>

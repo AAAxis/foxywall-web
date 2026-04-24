@@ -13,27 +13,15 @@ export function Hero() {
 
   return (
     <section className="pt-24 pb-20 md:pt-32 md:pb-28 relative overflow-hidden">
-      {/* Animated gradient blobs */}
-      <motion.div
-        animate={{ scale: [1, 1.2, 1], x: [0, 30, 0], y: [0, -20, 0] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-0 right-0 w-[700px] h-[700px] bg-gradient-to-br from-orange-200/50 via-amber-100/40 to-transparent rounded-full blur-3xl -translate-y-1/4 translate-x-1/4"
-      />
-      <motion.div
-        animate={{ scale: [1, 1.15, 1], x: [0, -20, 0], y: [0, 30, 0] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-blue-100/40 via-purple-50/20 to-transparent rounded-full blur-3xl translate-y-1/4 -translate-x-1/4"
-      />
-
       <div className="container mx-auto px-6 relative">
         <div className="max-w-3xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 bg-primary/10 text-primary rounded-full px-4 py-1.5 text-sm font-medium mb-6"
+            className="inline-flex items-center gap-2 border border-border text-muted-foreground rounded-full px-4 py-1.5 text-xs font-medium tracking-wider uppercase mb-6"
           >
-            🦊 {t("trustedByThousands")}
+            {t("trustedByThousands")}
           </motion.div>
 
           <motion.h1
@@ -44,9 +32,7 @@ export function Hero() {
           >
             {t("professionalVpn")}
             <br />
-            <span className="bg-gradient-to-r from-orange-500 via-amber-500 to-orange-400 bg-clip-text text-transparent">
-              {t("service")}
-            </span>
+            <span className="text-primary">{t("service")}</span>
           </motion.h1>
 
           <motion.p
@@ -66,9 +52,9 @@ export function Hero() {
           >
             <Link
               href={`/${language}/refer`}
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500/10 to-amber-500/10 border border-orange-500/20 text-primary rounded-full px-5 py-2 text-sm font-medium mb-6 hover:border-orange-500/40 transition-colors"
+              className="inline-flex items-center gap-2 border border-border text-foreground rounded-full px-5 py-2 text-sm font-medium mb-6 hover:border-primary/50 transition-colors"
             >
-              🎁 {t("referGiftCta")} <ArrowRight className="w-3.5 h-3.5" />
+              {t("referGiftCta")} <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </motion.div>
 

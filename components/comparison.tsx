@@ -45,42 +45,34 @@ export function Comparison() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="max-w-4xl mx-auto overflow-hidden rounded-2xl border border-border"
         >
-          {/* Header */}
-          <div className="grid grid-cols-3 bg-secondary/50">
+          <div className="grid grid-cols-3 bg-card">
             <div className="p-4 md:p-6" />
             <div className="p-4 md:p-6 text-center">
-              <span className="font-bold text-lg bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">
-                FoxyWall
-              </span>
+              <span className="font-semibold text-foreground">FoxyWall</span>
             </div>
             <div className="p-4 md:p-6 text-center">
-              <span className="font-bold text-lg text-muted-foreground">
+              <span className="font-semibold text-muted-foreground">
                 {t("comparisonTraditionalLabel")}
               </span>
             </div>
           </div>
 
-          {/* Rows */}
           {rows.map((row, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, x: -20 }}
-              animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.4, delay: 0.3 + index * 0.08 }}
-              className={`grid grid-cols-3 ${index % 2 === 0 ? "bg-background" : "bg-secondary/30"} border-t border-border`}
+              initial={{ opacity: 0, y: 10 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.3, delay: 0.2 + index * 0.05 }}
+              className="grid grid-cols-3 border-t border-border"
             >
               <div className="p-4 md:p-6 flex items-center">
-                <span className="text-sm md:text-base text-foreground font-medium">{row.foxywall}</span>
+                <span className="text-sm md:text-base text-foreground">{row.foxywall}</span>
               </div>
               <div className="p-4 md:p-6 flex items-center justify-center">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center">
-                  <Check className="w-5 h-5 text-white" />
-                </div>
+                <Check className="w-5 h-5 text-primary" />
               </div>
               <div className="p-4 md:p-6 flex items-center justify-center">
-                <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-                  <X className="w-5 h-5 text-muted-foreground" />
-                </div>
+                <X className="w-5 h-5 text-muted-foreground" />
               </div>
             </motion.div>
           ))}

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { motion, useInView } from "framer-motion"
-import { Check, Download, Sparkles } from "lucide-react"
+import { Check, Download } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 import { getStoreUrl } from "@/lib/device-utils"
 
@@ -44,11 +44,8 @@ export function Pricing() {
   ]
 
   return (
-    <section id="pricing" className="py-20 md:py-28 relative overflow-hidden" ref={ref}>
-      {/* Background decoration */}
-      <div className="absolute inset-0 bg-gradient-to-b from-secondary/30 via-secondary/50 to-secondary/30" />
-
-      <div className="container mx-auto px-6 relative">
+    <section id="pricing" className="py-20 md:py-28" ref={ref}>
+      <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -67,25 +64,16 @@ export function Pricing() {
               initial={{ opacity: 0, y: 40 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: index * 0.15 }}
-              whileHover={{ y: -6, transition: { duration: 0.2 } }}
-              className={`relative bg-background border-2 rounded-3xl p-8 transition-shadow ${
-                plan.popular
-                  ? "border-primary shadow-xl shadow-primary/10"
-                  : "border-border hover:shadow-lg hover:border-border"
+              className={`relative bg-card border rounded-2xl p-8 transition-colors ${
+                plan.popular ? "border-primary" : "border-border hover:border-foreground/20"
               }`}
             >
               {plan.popular && (
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={isInView ? { scale: 1 } : {}}
-                  transition={{ duration: 0.4, delay: 0.5, type: "spring" }}
-                  className="absolute -top-4 left-1/2 -translate-x-1/2"
-                >
-                  <span className="inline-flex items-center gap-1.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold px-4 py-2 rounded-full uppercase tracking-wide shadow-lg">
-                    <Sparkles className="w-3.5 h-3.5" />
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                  <span className="inline-block bg-primary text-primary-foreground text-[10px] font-semibold px-3 py-1 rounded-full uppercase tracking-widest">
                     {t("bestValue")}
                   </span>
-                </motion.div>
+                </div>
               )}
 
               <div className="mb-8">
@@ -127,10 +115,10 @@ export function Pricing() {
                 href={storeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`w-full inline-flex items-center justify-center gap-2 rounded-full py-3 font-semibold transition-all hover:scale-[1.02] ${
+                className={`w-full inline-flex items-center justify-center gap-2 rounded-full py-3 font-semibold transition-colors ${
                   plan.popular
-                    ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:shadow-lg hover:shadow-primary/20"
-                    : "bg-foreground text-background hover:opacity-90"
+                    ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                    : "bg-foreground text-background hover:bg-foreground/90"
                 }`}
               >
                 <Download className="w-5 h-5" />

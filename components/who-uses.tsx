@@ -11,10 +11,10 @@ export function WhoUses() {
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
   const personas = [
-    { icon: ShieldAlert, title: t("whoUsesPersona1Title"), description: t("whoUsesPersona1Desc"), color: "from-orange-500 to-amber-500" },
-    { icon: Plane, title: t("whoUsesPersona2Title"), description: t("whoUsesPersona2Desc"), color: "from-blue-500 to-cyan-500" },
-    { icon: Eye, title: t("whoUsesPersona3Title"), description: t("whoUsesPersona3Desc"), color: "from-purple-500 to-pink-500" },
-    { icon: Code, title: t("whoUsesPersona4Title"), description: t("whoUsesPersona4Desc"), color: "from-green-500 to-emerald-500" },
+    { icon: ShieldAlert, title: t("whoUsesPersona1Title"), description: t("whoUsesPersona1Desc") },
+    { icon: Plane, title: t("whoUsesPersona2Title"), description: t("whoUsesPersona2Desc") },
+    { icon: Eye, title: t("whoUsesPersona3Title"), description: t("whoUsesPersona3Desc") },
+    { icon: Code, title: t("whoUsesPersona4Title"), description: t("whoUsesPersona4Desc") },
   ]
 
   return (
@@ -44,16 +44,13 @@ export function WhoUses() {
               initial={{ opacity: 0, y: 40 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ y: -8, transition: { duration: 0.2 } }}
-              className="group relative bg-background border border-border rounded-2xl p-6 hover:shadow-xl hover:shadow-primary/5 hover:border-primary/30 transition-all cursor-default overflow-hidden"
+              className="bg-card border border-border rounded-xl p-6 hover:border-foreground/20 transition-colors"
             >
-              <div className={`absolute inset-0 bg-gradient-to-br ${persona.color} opacity-0 group-hover:opacity-[0.03] transition-opacity duration-300`} />
-
-              <div className={`relative w-14 h-14 rounded-xl bg-gradient-to-br ${persona.color} flex items-center justify-center mb-5 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                <persona.icon className="w-7 h-7 text-white" />
+              <div className="w-10 h-10 rounded-lg border border-border flex items-center justify-center mb-4">
+                <persona.icon className="w-5 h-5 text-primary" />
               </div>
-              <h3 className="relative text-foreground font-semibold text-lg mb-2">{persona.title}</h3>
-              <p className="relative text-muted-foreground text-sm leading-relaxed">{persona.description}</p>
+              <h3 className="text-foreground font-semibold text-lg mb-2">{persona.title}</h3>
+              <p className="text-muted-foreground text-sm leading-relaxed">{persona.description}</p>
             </motion.div>
           ))}
         </div>

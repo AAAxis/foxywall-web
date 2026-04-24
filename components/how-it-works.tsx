@@ -36,44 +36,23 @@ export function HowItWorks() {
           </p>
         </motion.div>
 
-        <div className="relative max-w-4xl mx-auto">
-          {/* Connecting line */}
-          <div className="hidden md:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-orange-500/20 via-orange-500/40 to-amber-500/20 -translate-y-1/2" />
-
-          <div className="grid md:grid-cols-3 gap-8 md:gap-12">
-            {steps.map((step, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 40 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.5, delay: index * 0.15 }}
-                className="relative text-center"
-              >
-                {/* Step number */}
-                <motion.div
-                  whileHover={{ scale: 1.1, transition: { duration: 0.2 } }}
-                  className="relative z-10 w-20 h-20 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center mx-auto mb-6 shadow-lg shadow-orange-500/20"
-                >
-                  <step.icon className="w-9 h-9 text-white" />
-                </motion.div>
-
-                {/* Step indicator */}
-                <span className="inline-block text-xs font-bold text-primary uppercase tracking-widest mb-2">
-                  {step.number}
-                </span>
-
-                <h3 className="text-foreground font-semibold text-xl mb-2">{step.title}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed max-w-xs mx-auto">{step.description}</p>
-
-                {/* Arrow for mobile */}
-                {index < steps.length - 1 && (
-                  <div className="md:hidden flex justify-center my-4">
-                    <div className="w-0.5 h-8 bg-gradient-to-b from-orange-500/40 to-amber-500/20" />
-                  </div>
-                )}
-              </motion.div>
-            ))}
-          </div>
+        <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-6">
+          {steps.map((step, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="bg-card border border-border rounded-xl p-8"
+            >
+              <div className="flex items-center justify-between mb-6">
+                <span className="text-xs font-mono text-muted-foreground tracking-widest">{step.number}</span>
+                <step.icon className="w-5 h-5 text-primary" />
+              </div>
+              <h3 className="text-foreground font-semibold text-lg mb-2">{step.title}</h3>
+              <p className="text-muted-foreground text-sm leading-relaxed">{step.description}</p>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>

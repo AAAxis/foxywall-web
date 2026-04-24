@@ -18,7 +18,7 @@ export function PrivacyPromise() {
   ]
 
   return (
-    <section id="privacy-promise" className="py-20 md:py-28 bg-foreground dark:bg-secondary/50" ref={ref}>
+    <section id="privacy-promise" className="py-20 md:py-28 border-y border-border" ref={ref}>
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -26,31 +26,31 @@ export function PrivacyPromise() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="inline-block text-sm font-semibold text-orange-400 uppercase tracking-wider mb-3">
+          <span className="inline-block text-sm font-semibold text-primary uppercase tracking-wider mb-3">
             {t("privacySectionTitle")}
           </span>
-          <h2 className="text-3xl md:text-5xl font-bold text-background dark:text-foreground mb-4">
+          <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4">
             {t("privacyHeading")}
           </h2>
-          <p className="text-background/60 dark:text-muted-foreground text-lg max-w-lg mx-auto">
+          <p className="text-muted-foreground text-lg max-w-lg mx-auto">
             {t("privacySubtitle")}
           </p>
         </motion.div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
           {items.map((item, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="text-center p-6"
+              transition={{ duration: 0.5, delay: index * 0.08 }}
+              className="bg-card border border-border rounded-xl p-6"
             >
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center mx-auto mb-5 shadow-lg shadow-orange-500/20">
-                <item.icon className="w-7 h-7 text-white" />
+              <div className="w-10 h-10 rounded-lg border border-border flex items-center justify-center mb-4">
+                <item.icon className="w-5 h-5 text-primary" />
               </div>
-              <h3 className="text-background dark:text-foreground font-semibold text-lg mb-2">{item.title}</h3>
-              <p className="text-background/50 dark:text-muted-foreground text-sm leading-relaxed">{item.description}</p>
+              <h3 className="text-foreground font-semibold mb-2">{item.title}</h3>
+              <p className="text-muted-foreground text-sm leading-relaxed">{item.description}</p>
             </motion.div>
           ))}
         </div>
@@ -58,10 +58,10 @@ export function PrivacyPromise() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.6 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
           className="mt-16 text-center"
         >
-          <p className="text-xl md:text-2xl font-bold bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent max-w-2xl mx-auto">
+          <p className="text-xl md:text-2xl font-medium text-foreground max-w-2xl mx-auto">
             {t("privacyStatement")}
           </p>
         </motion.div>
