@@ -5,7 +5,7 @@ export const defaultLanguage: Language = "en"
 export const languages = [
   { code: "en" as Language, name: "English", flag: "🇬🇧" },
   { code: "ru" as Language, name: "Russian", flag: "🇷🇺" },
-  { code: "zh-Hans" as Language, name: "Chinese Simplified", flag: "🇨🇳" },
+  { code: "zh-Hans" as Language, name: "Chinese", flag: "🇨🇳" },
 ]
 
 export const translations = {

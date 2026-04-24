@@ -20,7 +20,7 @@ export function getStoreUrl(): string {
   const device = getDeviceType()
 
   if (device === "ios") {
-    return "https://apps.apple.com/us/app/foxywall-vpn/id6755795018"
+    return "https://apps.apple.com/app/id6757646633"
   }
 
   if (device === "android") {
@@ -28,5 +28,5 @@ export function getStoreUrl(): string {
   }
 
   // Default to App Store for desktop/other
-  return "https://apps.apple.com/us/app/foxywall-vpn/id6755795018"
+  return "https://apps.apple.com/app/id6757646633"
 }
