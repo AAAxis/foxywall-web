@@ -1,6 +1,8 @@
 import type { ReactNode } from "react"
 import { formatDistanceToNow } from "date-fns"
 import { getFleetDevices, isOnline, type FleetDevice } from "@/lib/fleet"
+import { resolveLocations } from "@/lib/geo"
+import { formatBytes, formatBps } from "@/lib/format"
 import { OnlineDot, PlatformBadge, VpnStatePill } from "@/components/fleet/device-badges"
 
 export const dynamic = "force-dynamic"
@@ -21,15 +23,14 @@ export default async function FleetPage() {
   }
 
   const online = devices.filter((d) => isOnline(d.last_seen_at)).length
+  const locations = error ? new Map<string, string>() : await resolveLocations(devices.map((d) => d.public_ip))
 
   return (
-    <main className="mx-auto max-w-6xl px-6 py-10 text-white">
+    <main className="mx-auto max-w-7xl px-6 py-10 text-white">
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-white">Fleet</h1>
-          <p className="mt-1 text-sm text-white/70">
-            Enrolled devices and their latest heartbeat.
-          </p>
+          <p className="mt-1 text-sm text-white/70">Enrolled devices and their latest heartbeat.</p>
         </div>
         <div className="flex gap-6 text-sm">
           <Stat label="Devices" value={String(devices.length)} />
@@ -51,17 +52,20 @@ export default async function FleetPage() {
           No devices enrolled yet. Enroll a device with a provision code to see it here.
         </div>
       ) : (
-        <div className="overflow-hidden rounded-lg border border-white/10">
-          <table className="w-full text-left text-sm text-white">
+        <div className="overflow-x-auto rounded-lg border border-white/10">
+          <table className="w-full min-w-[1100px] text-left text-sm text-white">
             <thead className="bg-white/5 text-xs uppercase tracking-wide text-white/70">
               <tr>
                 <Th>Device</Th>
+                <Th>MAC</Th>
                 <Th>Platform</Th>
                 <Th>Status</Th>
                 <Th>Public IP</Th>
+                <Th>Location</Th>
+                <Th>Speed</Th>
+                <Th>Traffic</Th>
                 <Th>VPN</Th>
                 <Th>Version</Th>
-                <Th>Company</Th>
                 <Th>Last seen</Th>
               </tr>
             </thead>
@@ -70,15 +74,39 @@ export default async function FleetPage() {
                 <tr key={d.id} className="hover:bg-white/5">
                   <td className="px-4 py-3">
                     <div className="font-medium text-white">{d.device_name ?? "Unnamed"}</div>
-                    <div className="font-mono text-xs text-white/50">{d.device_id}</div>
+                    <div className="font-mono text-xs text-white/50">{d.company?.name ?? d.device_id}</div>
                   </td>
+                  <td className="px-4 py-3 font-mono text-xs text-white/80">{d.mac_address ?? "—"}</td>
                   <td className="px-4 py-3"><PlatformBadge type={d.device_type} /></td>
                   <td className="px-4 py-3"><OnlineDot online={isOnline(d.last_seen_at)} /></td>
                   <td className="px-4 py-3 font-mono text-xs text-white/80">{d.public_ip ?? "—"}</td>
+                  <td className="px-4 py-3 text-white/80">
+                    {d.public_ip ? locations.get(d.public_ip) ?? "—" : "—"}
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap text-xs text-white/80">
+                    {d.speed_down_bps || d.speed_up_bps ? (
+                      <span>↓ {formatBps(d.speed_down_bps)} · ↑ {formatBps(d.speed_up_bps)}</span>
+                    ) : (
+                      "—"
+                    )}
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap text-white/80">
+                    {d.rx_bytes || d.tx_bytes ? (
+                      <>
+                        <div className="font-medium text-white">
+                          {formatBytes((d.rx_bytes ?? 0) + (d.tx_bytes ?? 0))}
+                        </div>
+                        <div className="text-xs text-white/50">
+                          ↓ {formatBytes(d.rx_bytes)} · ↑ {formatBytes(d.tx_bytes)}
+                        </div>
+                      </>
+                    ) : (
+                      "—"
+                    )}
+                  </td>
                   <td className="px-4 py-3"><VpnStatePill state={d.vpn_state} /></td>
                   <td className="px-4 py-3 text-white/80">{d.app_version ?? "—"}</td>
-                  <td className="px-4 py-3 text-white/80">{d.company?.name ?? "—"}</td>
-                  <td className="px-4 py-3 text-white/70">{lastSeen(d)}</td>
+                  <td className="px-4 py-3 whitespace-nowrap text-white/70">{lastSeen(d)}</td>
                 </tr>
               ))}
             </tbody>

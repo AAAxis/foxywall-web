@@ -9,10 +9,15 @@ export type FleetDevice = {
   device_id: string
   device_name: string | null
   device_type: DeviceType
+  mac_address: string | null
   app_version: string | null
   public_ip: string | null
   vpn_state: "on" | "off" | null
   last_trigger: string | null
+  rx_bytes: number | null
+  tx_bytes: number | null
+  speed_down_bps: number | null
+  speed_up_bps: number | null
   enrolled_at: string
   last_seen_at: string | null
   company?: { name: string } | null
