@@ -20,7 +20,7 @@ create or replace function public.report_device_heartbeat(
 ) returns json
 language plpgsql
 security definer
-set search_path = public
+set search_path = public, extensions
 as $$
 declare
   v_dev fleet_devices%rowtype;

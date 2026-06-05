@@ -66,7 +66,7 @@ create or replace function public.enroll_corporate_device(
 ) returns json
 language plpgsql
 security definer
-set search_path = public
+set search_path = public, extensions
 as $$
 declare
   v_code     provision_codes%rowtype;
@@ -137,7 +137,7 @@ create or replace function public.report_device_heartbeat(
 ) returns json
 language plpgsql
 security definer
-set search_path = public
+set search_path = public, extensions
 as $$
 declare
   v_dev fleet_devices%rowtype;
