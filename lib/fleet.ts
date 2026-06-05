@@ -18,9 +18,20 @@ export type FleetDevice = {
   tx_bytes: number | null
   speed_down_bps: number | null
   speed_up_bps: number | null
+  gateway_host: string | null
+  socks_port: number | null
+  socks_user: string | null
+  socks_pass: string | null
+  exit_enabled: boolean | null
   enrolled_at: string
   last_seen_at: string | null
   company?: { name: string } | null
+}
+
+/** Builds the SOCKS5 connection URI for a device, or "" if no gateway assigned. */
+export function proxyUri(d: FleetDevice): string {
+  if (!d.gateway_host || !d.socks_port || !d.socks_user || !d.socks_pass) return ""
+  return `socks5://${d.socks_user}:${d.socks_pass}@${d.gateway_host}:${d.socks_port}`
 }
 
 /** A device is "online" if it reported a heartbeat within the last 5 minutes. */

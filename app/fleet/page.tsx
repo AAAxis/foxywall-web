@@ -1,9 +1,10 @@
 import type { ReactNode } from "react"
 import { formatDistanceToNow } from "date-fns"
-import { getFleetDevices, isOnline, type FleetDevice } from "@/lib/fleet"
+import { getFleetDevices, isOnline, proxyUri, type FleetDevice } from "@/lib/fleet"
 import { resolveLocations } from "@/lib/geo"
 import { formatBytes, formatBps } from "@/lib/format"
 import { OnlineDot, PlatformBadge, VpnStatePill } from "@/components/fleet/device-badges"
+import { CopyProxyButton } from "@/components/fleet/copy-proxy-button"
 
 export const dynamic = "force-dynamic"
 export const metadata = { title: "Fleet — FoxyWall", robots: { index: false } }
@@ -57,6 +58,7 @@ export default async function FleetPage() {
             <thead className="bg-white/5 text-xs uppercase tracking-wide text-white/70">
               <tr>
                 <Th>Device</Th>
+                <Th>Proxy</Th>
                 <Th>MAC</Th>
                 <Th>Platform</Th>
                 <Th>Status</Th>
@@ -75,6 +77,15 @@ export default async function FleetPage() {
                   <td className="px-4 py-3">
                     <div className="font-medium text-white">{d.device_name ?? "Unnamed"}</div>
                     <div className="font-mono text-xs text-white/50">{d.company?.name ?? d.device_id}</div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <CopyProxyButton
+                      uri={proxyUri(d)}
+                      host={d.gateway_host}
+                      port={d.socks_port}
+                      user={d.socks_user}
+                      pass={d.socks_pass}
+                    />
                   </td>
                   <td className="px-4 py-3 font-mono text-xs text-white/80">{d.mac_address ?? "—"}</td>
                   <td className="px-4 py-3"><PlatformBadge type={d.device_type} /></td>
