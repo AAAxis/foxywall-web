@@ -1,6 +1,9 @@
 import type { ComponentType, ReactNode } from "react"
 import Link from "next/link"
-import { Monitor, ShieldCheck, Server, ArrowLeft } from "lucide-react"
+import { Monitor, ShieldCheck, Server, ArrowLeft, Download } from "lucide-react"
+
+const DOWNLOAD_URL =
+  "https://uhpuqiptxcjluwsetoev.supabase.co/storage/v1/object/public/downloads/FoxyWallVPN-Setup.exe"
 
 export const metadata = {
   title: "FoxyWall for Windows — Enterprise",
@@ -43,23 +46,32 @@ export default function EnterprisePage() {
       </div>
 
       <div className="mt-12 rounded-2xl border border-border p-8">
-        <h2 className="text-xl font-semibold">Deploy to your organization</h2>
+        <h2 className="text-xl font-semibold">Start a free trial</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          Enterprise deployment is provisioned per organization. Contact us to get the
-          installer and your provisioning code.
+          Free for businesses to evaluate. Download the Windows installer and deploy it to
+          devices your organization owns or manages.
         </p>
-        <a
-          href="mailto:enterprise@foxywall.xyz?subject=FoxyWall%20Windows%20Enterprise"
-          className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3 font-semibold text-primary-foreground transition-transform hover:scale-105"
-        >
-          Contact enterprise sales
-        </a>
+        <div className="mt-6 flex flex-wrap gap-3">
+          <a
+            href={DOWNLOAD_URL}
+            className="inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3 font-semibold text-primary-foreground transition-transform hover:scale-105"
+          >
+            <Download className="h-5 w-5" />
+            Download free trial (Windows)
+          </a>
+          <a
+            href="mailto:enterprise@foxywall.xyz?subject=FoxyWall%20Windows%20Enterprise"
+            className="inline-flex items-center gap-2 rounded-full border border-border px-7 py-3 font-semibold text-foreground transition-colors hover:border-primary/50"
+          >
+            Contact sales
+          </a>
+        </div>
+        <p className="mt-5 max-w-xl text-xs leading-relaxed text-muted-foreground">
+          By downloading you confirm you will deploy FoxyWall only to devices your
+          organization owns or manages, and that those devices act as part of a managed
+          network — disclosed to their users under your IT and privacy policy.
+        </p>
       </div>
-
-      <p className="mt-8 text-xs text-muted-foreground">
-        Managed devices act as part of the corporate network per your organization&apos;s
-        IT and privacy policy.
-      </p>
     </main>
   )
 }
