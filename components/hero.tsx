@@ -3,7 +3,10 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { Smartphone, Chrome, ArrowRight, Shield, Zap, Globe } from "lucide-react"
+import { Smartphone, Chrome, ArrowRight, Shield, Zap, Globe, Monitor } from "lucide-react"
+
+const WINDOWS_DOWNLOAD_URL =
+  "https://uhpuqiptxcjluwsetoev.supabase.co/storage/v1/object/public/downloads/FoxyWallVPN-Setup.exe"
 import Link from "next/link"
 import { useLanguage } from "@/lib/language-context"
 
@@ -153,6 +156,18 @@ export function Hero() {
                 </Link>
               </motion.div>
             )}
+
+            {/* Desktop download — always visible under the tabs */}
+            <div className="mt-8">
+              <Link
+                href={WINDOWS_DOWNLOAD_URL}
+                className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <Monitor className="w-4 h-4" />
+                Download for Windows
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
           </motion.div>
         </div>
       </div>
