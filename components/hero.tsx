@@ -4,14 +4,11 @@ import { useState } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Smartphone, Chrome, ArrowRight, Shield, Zap, Globe, Monitor } from "lucide-react"
-
-const WINDOWS_DOWNLOAD_URL =
-  "https://uhpuqiptxcjluwsetoev.supabase.co/storage/v1/object/public/downloads/FoxyWallVPN-Setup.exe"
 import Link from "next/link"
 import { useLanguage } from "@/lib/language-context"
 
 export function Hero() {
-  const [activeTab, setActiveTab] = useState<"mobile" | "extension">("mobile")
+  const [activeTab, setActiveTab] = useState<"mobile" | "extension" | "windows">("mobile")
   const { t, language } = useLanguage()
 
   return (
@@ -108,6 +105,15 @@ export function Hero() {
                 <Chrome className="w-4 h-4" />
                 {t("extension")}
               </button>
+              <button
+                onClick={() => setActiveTab("windows")}
+                className={`flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-medium transition-all ${
+                  activeTab === "windows" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Monitor className="w-4 h-4" />
+                Windows
+              </button>
             </div>
 
             {activeTab === "mobile" && (
@@ -157,17 +163,25 @@ export function Hero() {
               </motion.div>
             )}
 
-            {/* Desktop download — always visible under the tabs */}
-            <div className="mt-8">
-              <Link
-                href={WINDOWS_DOWNLOAD_URL}
-                className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            {activeTab === "windows" && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-4"
               >
-                <Monitor className="w-4 h-4" />
-                Download for Windows
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
+                <p className="text-sm text-muted-foreground">
+                  FoxyWall for Windows is an enterprise deployment, managed by IT for company devices.
+                </p>
+                <Link href="/enterprise">
+                  <Button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 py-3 font-semibold gap-2 hover:scale-105 transition-transform">
+                    <Monitor className="w-5 h-5" />
+                    Enterprise
+                    <ArrowRight className="w-4 h-4" />
+                  </Button>
+                </Link>
+              </motion.div>
+            )}
           </motion.div>
         </div>
       </div>
