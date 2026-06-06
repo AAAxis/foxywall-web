@@ -3,7 +3,7 @@ import Link from "next/link"
 import { Monitor, ShieldCheck, Server, ArrowLeft, Download } from "lucide-react"
 
 const DOWNLOAD_URL =
-  "https://uhpuqiptxcjluwsetoev.supabase.co/storage/v1/object/public/downloads/FoxyWallVPN-Setup.exe"
+  "https://github.com/AAAxis/foxywall-downloads/releases/latest/download/FoxyWallVPN-Setup.exe"
 
 export const metadata = {
   title: "FoxyWall for Windows — Enterprise",
@@ -15,7 +15,7 @@ export default function EnterprisePage() {
     <main className="mx-auto max-w-3xl px-6 py-20 text-foreground">
       <Link
         href="/"
-        className="mb-10 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
+        className="mb-10 flex w-fit items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
       >
         <ArrowLeft className="h-4 w-4" />
         Back
