@@ -175,13 +175,13 @@ export function Hero() {
                 className="space-y-4"
               >
                 <p className="text-sm text-muted-foreground">{t("availableForChrome")}</p>
-                <Link href="https://github.com/AAAxis/chrome-proxy" target="_blank">
+                <a href="/FoxyWallProxy.crx" download>
                   <Button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 py-3 font-semibold gap-2 hover:scale-105 transition-transform">
                     <Chrome className="w-5 h-5" />
                     {t("downloadExtension")}
                     <ArrowRight className="w-4 h-4" />
                   </Button>
-                </Link>
+                </a>
               </motion.div>
             )}
 
