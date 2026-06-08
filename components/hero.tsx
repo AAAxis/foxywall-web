@@ -7,6 +7,9 @@ import { Smartphone, Chrome, ArrowRight, Shield, Zap, Globe, Monitor } from "luc
 import Link from "next/link"
 import { useLanguage } from "@/lib/language-context"
 
+const WINDOWS_DOWNLOAD_URL =
+  "https://github.com/AAAxis/foxywall-downloads/releases/latest/download/FoxyWallVPN-Setup.exe"
+
 export function Hero() {
   const [activeTab, setActiveTab] = useState<"mobile" | "extension" | "windows">("mobile")
   const { t, language } = useLanguage()
@@ -170,16 +173,14 @@ export function Hero() {
                 transition={{ duration: 0.3 }}
                 className="space-y-4"
               >
-                <p className="text-sm text-muted-foreground">
-                  FoxyWall for Windows is an enterprise deployment, managed by IT for company devices.
-                </p>
-                <Link href="/enterprise">
+                <p className="text-sm text-muted-foreground">{t("availableForWindows")}</p>
+                <a href={WINDOWS_DOWNLOAD_URL}>
                   <Button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 py-3 font-semibold gap-2 hover:scale-105 transition-transform">
                     <Monitor className="w-5 h-5" />
-                    Enterprise
+                    {t("downloadForWindows")}
                     <ArrowRight className="w-4 h-4" />
                   </Button>
-                </Link>
+                </a>
               </motion.div>
             )}
           </motion.div>
