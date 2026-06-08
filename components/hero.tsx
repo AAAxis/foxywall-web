@@ -15,7 +15,7 @@ const CHROME_EXTENSION_URL =
   "https://github.com/AAAxis/foxywall-downloads/releases/latest/download/FoxyWallProxy.zip"
 
 export function Hero() {
-  const [activeTab, setActiveTab] = useState<"mobile" | "extension" | "windows" | "macos">("mobile")
+  const [activeTab, setActiveTab] = useState<"mobile" | "web" | "desktop">("mobile")
   const [buildDate, setBuildDate] = useState<string | null>(null)
   const [macBuildDate, setMacBuildDate] = useState<string | null>(null)
   const { t, language } = useLanguage()
@@ -123,31 +123,22 @@ export function Hero() {
                 {t("mobile")}
               </button>
               <button
-                onClick={() => setActiveTab("extension")}
+                onClick={() => setActiveTab("web")}
                 className={`flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-medium transition-all ${
-                  activeTab === "extension" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                  activeTab === "web" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 <Chrome className="w-4 h-4" />
-                {t("extension")}
+                Web
               </button>
               <button
-                onClick={() => setActiveTab("windows")}
+                onClick={() => setActiveTab("desktop")}
                 className={`flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-medium transition-all ${
-                  activeTab === "windows" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                  activeTab === "desktop" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 <Monitor className="w-4 h-4" />
-                Windows
-              </button>
-              <button
-                onClick={() => setActiveTab("macos")}
-                className={`flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-medium transition-all ${
-                  activeTab === "macos" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <Apple className="w-4 h-4" />
-                macOS
+                Desktop
               </button>
             </div>
 
@@ -180,7 +171,7 @@ export function Hero() {
               </motion.div>
             )}
 
-            {activeTab === "extension" && (
+            {activeTab === "web" && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -201,45 +192,38 @@ export function Hero() {
               </motion.div>
             )}
 
-            {activeTab === "windows" && (
+            {activeTab === "desktop" && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3 }}
                 className="space-y-4"
               >
-                <p className="text-sm text-muted-foreground">{t("availableForWindows")}</p>
-                <a href={WINDOWS_DOWNLOAD_URL}>
-                  <Button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 py-3 font-semibold gap-2 hover:scale-105 transition-transform">
-                    <Monitor className="w-5 h-5" />
-                    {t("downloadForWindows")}
-                    <ArrowRight className="w-4 h-4" />
-                  </Button>
-                </a>
-                {buildDate && (
-                  <p className="text-xs text-muted-foreground">Build: {buildDate}</p>
-                )}
-              </motion.div>
-            )}
-
-            {activeTab === "macos" && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3 }}
-                className="space-y-4"
-              >
-                <p className="text-sm text-muted-foreground">{t("availableForMacOS")}</p>
-                <a href={MACOS_DOWNLOAD_URL}>
-                  <Button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 py-3 font-semibold gap-2 hover:scale-105 transition-transform">
-                    <Apple className="w-5 h-5" />
-                    {t("downloadForMacOS")}
-                    <ArrowRight className="w-4 h-4" />
-                  </Button>
-                </a>
-                {macBuildDate && (
-                  <p className="text-xs text-muted-foreground">Build: {macBuildDate}</p>
-                )}
+                <p className="text-sm text-muted-foreground">{t("availableForDesktop")}</p>
+                <div className="flex flex-wrap justify-center gap-4">
+                  <div className="flex flex-col items-center gap-1.5">
+                    <a href={WINDOWS_DOWNLOAD_URL}>
+                      <Button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 py-3 font-semibold gap-2 hover:scale-105 transition-transform">
+                        <Monitor className="w-5 h-5" />
+                        {t("downloadForWindows")}
+                      </Button>
+                    </a>
+                    {buildDate && (
+                      <p className="text-xs text-muted-foreground">Build: {buildDate}</p>
+                    )}
+                  </div>
+                  <div className="flex flex-col items-center gap-1.5">
+                    <a href={MACOS_DOWNLOAD_URL}>
+                      <Button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 py-3 font-semibold gap-2 hover:scale-105 transition-transform">
+                        <Apple className="w-5 h-5" />
+                        {t("downloadForMacOS")}
+                      </Button>
+                    </a>
+                    {macBuildDate && (
+                      <p className="text-xs text-muted-foreground">Build: {macBuildDate}</p>
+                    )}
+                  </div>
+                </div>
               </motion.div>
             )}
           </motion.div>
