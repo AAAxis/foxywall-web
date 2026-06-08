@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Smartphone, Chrome, ArrowRight, Shield, Zap, Globe, Monitor } from "lucide-react"
@@ -12,7 +12,26 @@ const WINDOWS_DOWNLOAD_URL =
 
 export function Hero() {
   const [activeTab, setActiveTab] = useState<"mobile" | "extension" | "windows">("mobile")
+  const [buildDate, setBuildDate] = useState<string | null>(null)
   const { t, language } = useLanguage()
+
+  // Show the latest Windows build date — read from the GitHub release asset's
+  // updated_at (bumped on every --clobber upload), so it stays current automatically.
+  useEffect(() => {
+    fetch("https://api.github.com/repos/AAAxis/foxywall-downloads/releases/latest")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (!d) return
+        const asset = d.assets?.find((a: { name: string }) => a.name === "FoxyWallVPN-Setup.exe")
+        const iso = asset?.updated_at || d.published_at
+        if (iso) {
+          setBuildDate(
+            new Date(iso).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })
+          )
+        }
+      })
+      .catch(() => {})
+  }, [])
 
   return (
     <section className="pt-24 pb-20 md:pt-32 md:pb-28 relative overflow-hidden">
@@ -181,6 +200,9 @@ export function Hero() {
                     <ArrowRight className="w-4 h-4" />
                   </Button>
                 </a>
+                {buildDate && (
+                  <p className="text-xs text-muted-foreground">Build: {buildDate}</p>
+                )}
               </motion.div>
             )}
           </motion.div>
