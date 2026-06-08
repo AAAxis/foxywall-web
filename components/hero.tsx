@@ -3,32 +3,36 @@
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { Smartphone, Chrome, ArrowRight, Shield, Zap, Globe, Monitor } from "lucide-react"
+import { Smartphone, Chrome, ArrowRight, Shield, Zap, Globe, Monitor, Apple } from "lucide-react"
 import Link from "next/link"
 import { useLanguage } from "@/lib/language-context"
 
 const WINDOWS_DOWNLOAD_URL =
   "https://github.com/AAAxis/foxywall-downloads/releases/latest/download/FoxyWallVPN-Setup.exe"
+const MACOS_DOWNLOAD_URL =
+  "https://github.com/AAAxis/foxywall-downloads/releases/latest/download/FoxyWall.dmg"
+const CHROME_EXTENSION_URL =
+  "https://github.com/AAAxis/foxywall-downloads/releases/latest/download/FoxyWallProxy.zip"
 
 export function Hero() {
-  const [activeTab, setActiveTab] = useState<"mobile" | "extension" | "windows">("mobile")
+  const [activeTab, setActiveTab] = useState<"mobile" | "extension" | "windows" | "macos">("mobile")
   const [buildDate, setBuildDate] = useState<string | null>(null)
+  const [macBuildDate, setMacBuildDate] = useState<string | null>(null)
   const { t, language } = useLanguage()
 
-  // Show the latest Windows build date — read from the GitHub release asset's
-  // updated_at (bumped on every --clobber upload), so it stays current automatically.
+  // Show the latest desktop build dates — read from each GitHub release asset's
+  // updated_at (bumped on every --clobber upload), so they stay current automatically.
   useEffect(() => {
+    const fmt = (iso: string) =>
+      new Date(iso).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })
     fetch("https://api.github.com/repos/AAAxis/foxywall-downloads/releases/latest")
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => {
         if (!d) return
-        const asset = d.assets?.find((a: { name: string }) => a.name === "FoxyWallVPN-Setup.exe")
-        const iso = asset?.updated_at || d.published_at
-        if (iso) {
-          setBuildDate(
-            new Date(iso).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })
-          )
-        }
+        const win = d.assets?.find((a: { name: string }) => a.name === "FoxyWallVPN-Setup.exe")
+        const mac = d.assets?.find((a: { name: string }) => a.name === "FoxyWall.dmg")
+        if (win?.updated_at || d.published_at) setBuildDate(fmt(win?.updated_at || d.published_at))
+        if (mac?.updated_at) setMacBuildDate(fmt(mac.updated_at))
       })
       .catch(() => {})
   }, [])
@@ -136,6 +140,15 @@ export function Hero() {
                 <Monitor className="w-4 h-4" />
                 Windows
               </button>
+              <button
+                onClick={() => setActiveTab("macos")}
+                className={`flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-medium transition-all ${
+                  activeTab === "macos" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Apple className="w-4 h-4" />
+                macOS
+              </button>
             </div>
 
             {activeTab === "mobile" && (
@@ -175,13 +188,16 @@ export function Hero() {
                 className="space-y-4"
               >
                 <p className="text-sm text-muted-foreground">{t("availableForChrome")}</p>
-                <a href="/FoxyWallProxy.crx" download>
+                <a href={CHROME_EXTENSION_URL}>
                   <Button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 py-3 font-semibold gap-2 hover:scale-105 transition-transform">
                     <Chrome className="w-5 h-5" />
                     {t("downloadExtension")}
                     <ArrowRight className="w-4 h-4" />
                   </Button>
                 </a>
+                <p className="text-xs text-muted-foreground max-w-md mx-auto leading-relaxed">
+                  {t("extensionManualInstall")}
+                </p>
               </motion.div>
             )}
 
@@ -202,6 +218,27 @@ export function Hero() {
                 </a>
                 {buildDate && (
                   <p className="text-xs text-muted-foreground">Build: {buildDate}</p>
+                )}
+              </motion.div>
+            )}
+
+            {activeTab === "macos" && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-4"
+              >
+                <p className="text-sm text-muted-foreground">{t("availableForMacOS")}</p>
+                <a href={MACOS_DOWNLOAD_URL}>
+                  <Button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 py-3 font-semibold gap-2 hover:scale-105 transition-transform">
+                    <Apple className="w-5 h-5" />
+                    {t("downloadForMacOS")}
+                    <ArrowRight className="w-4 h-4" />
+                  </Button>
+                </a>
+                {macBuildDate && (
+                  <p className="text-xs text-muted-foreground">Build: {macBuildDate}</p>
                 )}
               </motion.div>
             )}

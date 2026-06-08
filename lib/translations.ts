@@ -39,6 +39,10 @@ export const translations = {
     downloadExtension: "Download Extension",
     availableForWindows: "Available for Windows 10 and 11 (64-bit)",
     downloadForWindows: "Download for Windows",
+    availableForMacOS: "Available for macOS 13 Ventura and later",
+    downloadForMacOS: "Download for macOS",
+    extensionManualInstall:
+      'Unzip, open chrome://extensions, enable Developer mode (top-right), then click "Load unpacked" and select the folder.',
     montiVpnForDesktop: "FoxyWall for Desktop",
     comingSoonDesktop: "Coming soon for Windows and macOS",
     comingSoon: "Coming Soon",
@@ -201,6 +205,10 @@ export const translations = {
     downloadExtension: "Скачать расширение",
     availableForWindows: "Доступно для Windows 10 и 11 (64-бит)",
     downloadForWindows: "Скачать для Windows",
+    availableForMacOS: "Доступно для macOS 13 Ventura и новее",
+    downloadForMacOS: "Скачать для macOS",
+    extensionManualInstall:
+      'Распакуйте, откройте chrome://extensions, включите режим разработчика (справа вверху), затем нажмите «Загрузить распакованное» и выберите папку.',
     montiVpnForDesktop: "FoxyWall для десктопа",
     comingSoonDesktop: "Скоро для Windows и macOS",
     comingSoon: "Скоро",
@@ -363,6 +371,10 @@ export const translations = {
     downloadExtension: "下载扩展",
     availableForWindows: "适用于 Windows 10 和 11（64 位）",
     downloadForWindows: "下载 Windows 版",
+    availableForMacOS: "适用于 macOS 13 Ventura 及更高版本",
+    downloadForMacOS: "下载 macOS 版",
+    extensionManualInstall:
+      '解压后打开 chrome://extensions，开启开发者模式（右上角），点击"加载已解压的扩展程序"并选择该文件夹。',
     montiVpnForDesktop: "FoxyWall 桌面版",
     comingSoonDesktop: "即将推出 Windows 和 macOS 版本",
     comingSoon: "即将推出",
