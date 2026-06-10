@@ -25,6 +25,11 @@ export function Footer() {
           <div className="flex flex-wrap gap-6 text-sm">
             <Link href={`/${language}#features`} className="text-muted-foreground hover:text-foreground transition-colors">{t("features")}</Link>
             <Link href={`/${language}#pricing`} className="text-muted-foreground hover:text-foreground transition-colors">{t("pricing")}</Link>
+            <Link href={`/${language}/windows`} className="text-muted-foreground hover:text-foreground transition-colors">Windows</Link>
+            <Link href={`/${language}/macos`} className="text-muted-foreground hover:text-foreground transition-colors">macOS</Link>
+            <Link href={`/${language}/chrome`} className="text-muted-foreground hover:text-foreground transition-colors">Chrome</Link>
+            <Link href={`/${language}/android`} className="text-muted-foreground hover:text-foreground transition-colors">Android</Link>
+            <Link href={`/${language}/ios`} className="text-muted-foreground hover:text-foreground transition-colors">iOS</Link>
             <Link href={`/${language}/blog`} className="text-muted-foreground hover:text-foreground transition-colors">{t("blog")}</Link>
             <Link href="https://holylabs.net/privacy" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">{t("privacyPolicy")}</Link>
             <Link href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">{t("terms")}</Link>
