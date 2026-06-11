@@ -1,0 +1,15 @@
+[Unit]
+Description=FoxyWall residential relay agent (renders Xray portal config from Supabase)
+After=network-online.target xray.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/foxywall-relay.env
+ExecStart=/usr/bin/python3 /opt/foxywall-relay/agent.py
+Restart=always
+RestartSec=10
+User=root
+
+[Install]
+WantedBy=multi-user.target
