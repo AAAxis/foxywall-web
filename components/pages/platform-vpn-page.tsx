@@ -15,7 +15,7 @@ export type VpnPlatform = "windows" | "macos" | "chrome" | "android" | "ios"
 const WINDOWS_DOWNLOAD_URL =
   "https://github.com/AAAxis/foxywall-downloads/releases/latest/download/FoxyWallVPN-Setup.exe"
 const MACOS_DOWNLOAD_URL =
-  "https://github.com/AAAxis/foxywall-downloads/releases/latest/download/FoxyWall.pkg"
+  "https://github.com/AAAxis/foxywall-downloads/releases/latest/download/FoxyWall.dmg"
 const CHROME_EXTENSION_URL =
   "https://github.com/AAAxis/foxywall-downloads/releases/latest/download/FoxyWallProxy.zip"
 const APP_STORE_URL = "https://apps.apple.com/app/id6757646633"

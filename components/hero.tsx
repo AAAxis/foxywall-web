@@ -10,7 +10,7 @@ import { useLanguage } from "@/lib/language-context"
 const WINDOWS_DOWNLOAD_URL =
   "https://github.com/AAAxis/foxywall-downloads/releases/latest/download/FoxyWallVPN-Setup.exe"
 const MACOS_DOWNLOAD_URL =
-  "https://github.com/AAAxis/foxywall-downloads/releases/latest/download/FoxyWall.pkg"
+  "https://github.com/AAAxis/foxywall-downloads/releases/latest/download/FoxyWall.dmg"
 const CHROME_EXTENSION_URL =
   "https://github.com/AAAxis/foxywall-downloads/releases/latest/download/FoxyWallProxy.zip"
 
@@ -30,7 +30,7 @@ export function Hero() {
       .then((d) => {
         if (!d) return
         const win = d.assets?.find((a: { name: string }) => a.name === "FoxyWallVPN-Setup.exe")
-        const mac = d.assets?.find((a: { name: string }) => a.name === "FoxyWall.pkg")
+        const mac = d.assets?.find((a: { name: string }) => a.name === "FoxyWall.dmg")
         if (win?.updated_at || d.published_at) setBuildDate(fmt(win?.updated_at || d.published_at))
         if (mac?.updated_at) setMacBuildDate(fmt(mac.updated_at))
       })
