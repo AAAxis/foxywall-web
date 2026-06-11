@@ -21,7 +21,12 @@ export default async function FleetPage() {
   try {
     // One row per physical device (keyed by MAC), keeping the latest/active IP.
     // Collapses same-device re-enrollments that minted new device_ids.
-    devices = dedupeByDevice(await getFleetDevices())
+    // Only list devices we can actually identify or use: a real unique identifier
+    // (MAC) or a live proxy link. Drops incomplete enrollments (e.g. test/macOS
+    // devices with neither a MAC nor an assigned gateway).
+    devices = dedupeByDevice(await getFleetDevices()).filter(
+      (d) => d.mac_address || proxyUri(d),
+    )
   } catch (e) {
     error = e instanceof Error ? e.message : "Failed to load devices."
   }
