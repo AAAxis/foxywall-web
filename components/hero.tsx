@@ -12,7 +12,7 @@ const WINDOWS_DOWNLOAD_URL =
 const MACOS_DOWNLOAD_URL =
   "https://github.com/AAAxis/foxywall-downloads/releases/latest/download/FoxyWall.dmg"
 const CHROME_EXTENSION_URL =
-  "https://github.com/AAAxis/foxywall-downloads/releases/latest/download/FoxyWallProxy.zip"
+  "https://chromewebstore.google.com/detail/foxywall-proxy/kehknicaphpgagjplpdanjpnpkchakib"
 
 export function Hero() {
   const [activeTab, setActiveTab] = useState<"mobile" | "web" | "desktop">("mobile")
@@ -179,7 +179,7 @@ export function Hero() {
                 className="space-y-4"
               >
                 <p className="text-sm text-muted-foreground">{t("availableForChrome")}</p>
-                <a href={CHROME_EXTENSION_URL}>
+                <a href={CHROME_EXTENSION_URL} target="_blank" rel="noopener noreferrer">
                   <Button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 py-3 font-semibold gap-2 hover:scale-105 transition-transform">
                     <Chrome className="w-5 h-5" />
                     {t("downloadExtension")}

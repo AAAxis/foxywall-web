@@ -17,7 +17,7 @@ const WINDOWS_DOWNLOAD_URL =
 const MACOS_DOWNLOAD_URL =
   "https://github.com/AAAxis/foxywall-downloads/releases/latest/download/FoxyWall.dmg"
 const CHROME_EXTENSION_URL =
-  "https://github.com/AAAxis/foxywall-downloads/releases/latest/download/FoxyWallProxy.zip"
+  "https://chromewebstore.google.com/detail/foxywall-proxy/kehknicaphpgagjplpdanjpnpkchakib"
 const APP_STORE_URL = "https://apps.apple.com/app/id6757646633"
 const GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=com.theholylabs.rock"
 
@@ -35,7 +35,7 @@ const CONFIG = {
     installKey: "macosInstall", highlightTitleKey: "macosHighlightTitle", highlightBodyKey: "macosHighlightBody",
   },
   chrome: {
-    url: CHROME_EXTENSION_URL, external: false, icon: Chrome, highlightIcon: Puzzle, name: "Google Chrome",
+    url: CHROME_EXTENSION_URL, external: true, icon: Chrome, highlightIcon: Puzzle, name: "Google Chrome",
     downloadKey: "downloadExtension",
     titleKey: "chromeTitle", subtitleKey: "chromeSubtitle", requirementsKey: "chromeRequirements",
     installKey: "chromeInstall", highlightTitleKey: "chromeHighlightTitle", highlightBodyKey: "chromeHighlightBody",
