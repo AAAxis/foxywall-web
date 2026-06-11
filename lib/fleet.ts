@@ -71,7 +71,6 @@ export function dedupeByDevice(devices: FleetDevice[]): FleetDevice[] {
     } else if (!base.gateway_host && d.gateway_host) {
       // latest row lacks an assignment; backfill from this (older) assigned row
       base.gateway_host = d.gateway_host
-      base.gateway_port = d.gateway_port
       base.socks_port = d.socks_port
       base.socks_user = d.socks_user
       base.socks_pass = d.socks_pass
