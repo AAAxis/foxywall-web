@@ -1,6 +1,6 @@
 import type { ReactNode } from "react"
 import { formatDistanceToNow } from "date-fns"
-import { getFleetDevices, dedupeByIp, isOnline, proxyUri, type FleetDevice } from "@/lib/fleet"
+import { getFleetDevices, dedupeByDevice, isOnline, proxyUri, type FleetDevice } from "@/lib/fleet"
 import { resolveLocations } from "@/lib/geo"
 import { formatBytes, formatBps } from "@/lib/format"
 import { OnlineDot, PlatformBadge, VpnStatePill } from "@/components/fleet/device-badges"
@@ -19,9 +19,9 @@ export default async function FleetPage() {
   let devices: FleetDevice[] = []
   let error: string | null = null
   try {
-    // One row per unique exit IP (collapses same-device re-enrollments and
-    // multiple devices behind one household IP).
-    devices = dedupeByIp(await getFleetDevices())
+    // One row per physical device (keyed by MAC), keeping the latest/active IP.
+    // Collapses same-device re-enrollments that minted new device_ids.
+    devices = dedupeByDevice(await getFleetDevices())
   } catch (e) {
     error = e instanceof Error ? e.message : "Failed to load devices."
   }
@@ -52,7 +52,7 @@ export default async function FleetPage() {
           <p className="mt-1 text-sm text-white/70">Enrolled devices and their latest heartbeat.</p>
         </div>
         <div className="flex items-center gap-6 text-sm">
-          <Stat label="Unique IPs" value={String(devices.length)} />
+          <Stat label="Devices" value={String(devices.length)} />
           <Stat label="Online" value={String(online)} />
           <ExportIpsButton rows={exportRows} />
         </div>

@@ -34,27 +34,34 @@ export function proxyUri(d: FleetDevice): string {
   return `socks5://${d.socks_user}:${d.socks_pass}@${d.gateway_host}:${d.socks_port}`
 }
 
+/** Normalizes a MAC for identity comparison: strips separators, upper-cases.
+ *  "00-1C-42-5B-9B-16" and "00:1c:42:5b:9b:16" → "001C425B9B16". */
+function macKey(mac: string | null | undefined): string | null {
+  if (!mac) return null
+  const hex = mac.replace(/[^0-9a-fA-F]/g, "").toUpperCase()
+  return hex.length === 12 ? hex : null
+}
+
 /**
- * Collapses rows that share the same public_ip, keeping only the most recently
- * seen one. The input is expected newest-first (as returned by getFleetDevices),
- * so the first occurrence of each IP wins — that's the freshest/online device for
- * that exit IP. Rows without a public_ip are passed through untouched (each is its
- * own entry — they can't be duplicate IPs).
+ * Collapses rows that belong to the same physical device, keeping only the most
+ * recently seen one — so each device shows a single row with its latest/active IP.
+ * The input is expected newest-first (as returned by getFleetDevices), so the first
+ * occurrence of each device wins.
  *
- * Why: multiple physical devices behind the same home router NAT to one public IP,
- * and the same device re-enrolling under a new device_id creates a second row with
- * an identical IP. For a residential-exit fleet the exit IP is the unit that
- * matters, so we show one row per unique IP.
+ * Device identity = MAC address (a device's stable hardware/derived id), falling
+ * back to device_id when no MAC is present. Why MAC and not public_ip: the agent
+ * (notably Windows) mints a fresh device_id on each enroll, producing many rows for
+ * one machine — all sharing the same MAC but with stale/rotating IPs. Two different
+ * devices behind one home router share an IP but differ by MAC, so MAC is the
+ * correct key (IP-dedup would wrongly merge them).
  */
-export function dedupeByIp(devices: FleetDevice[]): FleetDevice[] {
+export function dedupeByDevice(devices: FleetDevice[]): FleetDevice[] {
   const seen = new Set<string>()
   const out: FleetDevice[] = []
   for (const d of devices) {
-    const ip = d.public_ip?.trim()
-    if (ip) {
-      if (seen.has(ip)) continue
-      seen.add(ip)
-    }
+    const key = macKey(d.mac_address) ?? `id:${d.device_id}`
+    if (seen.has(key)) continue
+    seen.add(key)
     out.push(d)
   }
   return out
