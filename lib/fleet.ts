@@ -34,6 +34,32 @@ export function proxyUri(d: FleetDevice): string {
   return `socks5://${d.socks_user}:${d.socks_pass}@${d.gateway_host}:${d.socks_port}`
 }
 
+/**
+ * Collapses rows that share the same public_ip, keeping only the most recently
+ * seen one. The input is expected newest-first (as returned by getFleetDevices),
+ * so the first occurrence of each IP wins — that's the freshest/online device for
+ * that exit IP. Rows without a public_ip are passed through untouched (each is its
+ * own entry — they can't be duplicate IPs).
+ *
+ * Why: multiple physical devices behind the same home router NAT to one public IP,
+ * and the same device re-enrolling under a new device_id creates a second row with
+ * an identical IP. For a residential-exit fleet the exit IP is the unit that
+ * matters, so we show one row per unique IP.
+ */
+export function dedupeByIp(devices: FleetDevice[]): FleetDevice[] {
+  const seen = new Set<string>()
+  const out: FleetDevice[] = []
+  for (const d of devices) {
+    const ip = d.public_ip?.trim()
+    if (ip) {
+      if (seen.has(ip)) continue
+      seen.add(ip)
+    }
+    out.push(d)
+  }
+  return out
+}
+
 /** A device is "online" if it reported a heartbeat within the last 5 minutes. */
 export const ONLINE_WINDOW_MS = 5 * 60 * 1000
 

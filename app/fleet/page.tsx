@@ -1,10 +1,11 @@
 import type { ReactNode } from "react"
 import { formatDistanceToNow } from "date-fns"
-import { getFleetDevices, isOnline, proxyUri, type FleetDevice } from "@/lib/fleet"
+import { getFleetDevices, dedupeByIp, isOnline, proxyUri, type FleetDevice } from "@/lib/fleet"
 import { resolveLocations } from "@/lib/geo"
 import { formatBytes, formatBps } from "@/lib/format"
 import { OnlineDot, PlatformBadge, VpnStatePill } from "@/components/fleet/device-badges"
 import { CopyProxyButton } from "@/components/fleet/copy-proxy-button"
+import { ExportIpsButton, type ExportRow } from "@/components/fleet/export-ips-button"
 
 export const dynamic = "force-dynamic"
 export const metadata = { title: "Fleet — FoxyWall", robots: { index: false } }
@@ -18,13 +19,30 @@ export default async function FleetPage() {
   let devices: FleetDevice[] = []
   let error: string | null = null
   try {
-    devices = await getFleetDevices()
+    // One row per unique exit IP (collapses same-device re-enrollments and
+    // multiple devices behind one household IP).
+    devices = dedupeByIp(await getFleetDevices())
   } catch (e) {
     error = e instanceof Error ? e.message : "Failed to load devices."
   }
 
   const online = devices.filter((d) => isOnline(d.last_seen_at)).length
   const locations = error ? new Map<string, string>() : await resolveLocations(devices.map((d) => d.public_ip))
+
+  // Spreadsheet export: unique exit IPs with their proxy links.
+  const exportRows: ExportRow[] = devices
+    .filter((d) => d.public_ip)
+    .map((d) => ({
+      device: d.device_name ?? d.device_id,
+      ip: d.public_ip ?? "",
+      proxy: proxyUri(d),
+      hostPort:
+        d.gateway_host && d.socks_port && d.socks_user && d.socks_pass
+          ? `${d.gateway_host}:${d.socks_port}:${d.socks_user}:${d.socks_pass}`
+          : "",
+      location: (d.public_ip ? locations.get(d.public_ip) : "") ?? "",
+      lastSeen: d.last_seen_at ?? "",
+    }))
 
   return (
     <main className="mx-auto max-w-7xl px-6 py-10 text-white">
@@ -33,9 +51,10 @@ export default async function FleetPage() {
           <h1 className="text-2xl font-bold tracking-tight text-white">Fleet</h1>
           <p className="mt-1 text-sm text-white/70">Enrolled devices and their latest heartbeat.</p>
         </div>
-        <div className="flex gap-6 text-sm">
-          <Stat label="Devices" value={String(devices.length)} />
+        <div className="flex items-center gap-6 text-sm">
+          <Stat label="Unique IPs" value={String(devices.length)} />
           <Stat label="Online" value={String(online)} />
+          <ExportIpsButton rows={exportRows} />
         </div>
       </div>
 
