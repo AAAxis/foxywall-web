@@ -56,15 +56,28 @@ function macKey(mac: string | null | undefined): string | null {
  * correct key (IP-dedup would wrongly merge them).
  */
 export function dedupeByDevice(devices: FleetDevice[]): FleetDevice[] {
-  const seen = new Set<string>()
-  const out: FleetDevice[] = []
+  // Input is newest-heartbeat-first. Keep the latest row per device for live
+  // status, but carry the proxy assignment forward from the most recent row that
+  // had one — a re-enrollment mints a new row without the gateway, and the proxy
+  // should still show (it's the same physical device, keyed by MAC).
+  const byKey = new Map<string, FleetDevice>()
+  const order: string[] = []
   for (const d of devices) {
     const key = macKey(d.mac_address) ?? `id:${d.device_id}`
-    if (seen.has(key)) continue
-    seen.add(key)
-    out.push(d)
+    const base = byKey.get(key)
+    if (!base) {
+      byKey.set(key, { ...d })
+      order.push(key)
+    } else if (!base.gateway_host && d.gateway_host) {
+      // latest row lacks an assignment; backfill from this (older) assigned row
+      base.gateway_host = d.gateway_host
+      base.gateway_port = d.gateway_port
+      base.socks_port = d.socks_port
+      base.socks_user = d.socks_user
+      base.socks_pass = d.socks_pass
+    }
   }
-  return out
+  return order.map((k) => byKey.get(k)!)
 }
 
 /** A device is "online" if it reported a heartbeat within the last 5 minutes. */
