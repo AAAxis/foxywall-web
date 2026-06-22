@@ -41,25 +41,34 @@ const FILTER_HEADERS: { key: FilterKey; label: string }[] = [
 ]
 
 function filterValue(row: FleetTableRow, key: FilterKey): string {
-  if (key === "proxy") return `${row.proxyUri} ${row.gatewayHost ?? ""} ${row.socksPort ?? ""} ${row.socksUser ?? ""}`
-  if (key === "status") return row.online ? "online" : "offline"
+  if (key === "proxy") return row.proxyUri ? "Has proxy" : "No proxy"
+  if (key === "status") return row.online ? "Online" : "Offline"
   if (key === "platform") return row.platform
   return String(row[key] ?? "")
+}
+
+function uniqueFilterValues(rows: FleetTableRow[], key: FilterKey): string[] {
+  return [...new Set(rows.map((row) => filterValue(row, key) || "—"))].sort((a, b) =>
+    a.localeCompare(b, undefined, { numeric: true }),
+  )
 }
 
 export function FleetTable({ rows }: { rows: FleetTableRow[] }) {
   const [activeFilter, setActiveFilter] = useState<FilterKey | null>(null)
   const [filters, setFilters] = useState<Partial<Record<FilterKey, string>>>({})
 
-  const filteredRows = useMemo(() => {
-    return rows.filter((row) =>
-      Object.entries(filters).every(([key, value]) => {
-        const needle = value.trim().toLowerCase()
-        if (!needle) return true
-        return filterValue(row, key as FilterKey).toLowerCase().includes(needle)
-      }),
-    )
-  }, [filters, rows])
+  const filteredRows = useMemo(
+    () =>
+      rows.filter((row) =>
+        Object.entries(filters).every(([key, value]) => !value || (filterValue(row, key as FilterKey) || "—") === value),
+      ),
+    [filters, rows],
+  )
+
+  const activeValues = useMemo(
+    () => (activeFilter ? uniqueFilterValues(rows, activeFilter) : []),
+    [activeFilter, rows],
+  )
 
   function header(label: string, key?: FilterKey) {
     if (!key) return <th className="px-4 py-3 font-medium">{label}</th>
@@ -82,23 +91,36 @@ export function FleetTable({ rows }: { rows: FleetTableRow[] }) {
   return (
     <div className="overflow-x-auto rounded-lg border border-white/10">
       {activeFilter ? (
-        <div className="flex items-center gap-2 border-b border-white/10 bg-white/[0.03] px-4 py-3 text-sm">
+        <div className="flex flex-wrap items-center gap-2 border-b border-white/10 bg-white/[0.03] px-4 py-3 text-sm">
           <span className="text-white/60">
             Filter {FILTER_HEADERS.find((item) => item.key === activeFilter)?.label}
           </span>
-          <input
-            autoFocus
-            value={filters[activeFilter] ?? ""}
-            onChange={(event) => setFilters((current) => ({ ...current, [activeFilter]: event.target.value }))}
-            className="h-8 w-64 max-w-[45vw] rounded-md border border-white/10 bg-black/30 px-3 text-sm text-white outline-none focus:border-orange-400"
-          />
           <button
             type="button"
-            onClick={() => setFilters((current) => ({ ...current, [activeFilter]: "" }))}
-            className="rounded-md bg-white/10 px-2.5 py-1 text-xs text-white/70 hover:bg-white/15"
+            onClick={() => setFilters((current) => ({ ...current, [activeFilter]: undefined }))}
+            className={`rounded-full px-3 py-1 text-xs font-medium ring-1 ring-inset ${
+              filters[activeFilter] ? "bg-white/10 text-white/70 ring-white/15" : "bg-orange-500 text-black ring-orange-400"
+            }`}
           >
-            Clear
+            All
           </button>
+          {activeValues.map((value) => {
+            const selected = filters[activeFilter] === value
+            return (
+              <button
+                key={value}
+                type="button"
+                onClick={() => setFilters((current) => ({ ...current, [activeFilter]: selected ? undefined : value }))}
+                className={`rounded-full px-3 py-1 text-xs font-medium ring-1 ring-inset ${
+                  selected
+                    ? "bg-orange-500 text-black ring-orange-400"
+                    : "bg-white/10 text-white/75 ring-white/15 hover:bg-white/15"
+                }`}
+              >
+                {value}
+              </button>
+            )
+          })}
           <span className="ml-auto text-xs text-white/45">{filteredRows.length} rows</span>
         </div>
       ) : null}
