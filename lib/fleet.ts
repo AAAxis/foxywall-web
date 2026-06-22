@@ -87,12 +87,33 @@ export function isOnline(lastSeenAt: string | null): boolean {
   return Date.now() - new Date(lastSeenAt).getTime() < ONLINE_WINDOW_MS
 }
 
-function isExternalProxyDevice(device: FleetDevice): boolean {
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+
+function hasProxyCredentials(device: FleetDevice): boolean {
+  return !!(device.gateway_host && device.socks_port && device.socks_user && device.socks_pass)
+}
+
+function sameHost(a: string | null | undefined, b: string | null | undefined): boolean {
+  return !!a && !!b && a.trim().toLowerCase() === b.trim().toLowerCase()
+}
+
+function looksLikeImportedProxyDevice(device: FleetDevice): boolean {
+  const modelName = (device.device_name ?? "").trim()
+  return (
+    hasProxyCredentials(device) &&
+    UUID_RE.test(device.device_id) &&
+    /^[A-Z0-9][A-Z0-9 -]{3,24}$/i.test(modelName)
+  )
+}
+
+export function isExternalProxyDevice(device: FleetDevice): boolean {
   return (
     device.account_id === "EXTERNAL-PROXIES" ||
     device.last_trigger === "external_proxy" ||
     device.app_version === "external-proxy" ||
-    device.device_id.startsWith("external-proxy-")
+    device.device_id.startsWith("external-proxy-") ||
+    (hasProxyCredentials(device) && sameHost(device.public_ip, device.gateway_host)) ||
+    looksLikeImportedProxyDevice(device)
   )
 }
 

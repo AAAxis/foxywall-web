@@ -1,6 +1,13 @@
 import type { ReactNode } from "react"
 import { formatDistanceToNow } from "date-fns"
-import { getFleetDevices, dedupeByDevice, isOnline, proxyUri, type FleetDevice } from "@/lib/fleet"
+import {
+  getFleetDevices,
+  dedupeByDevice,
+  isExternalProxyDevice,
+  isOnline,
+  proxyUri,
+  type FleetDevice,
+} from "@/lib/fleet"
 import { resolveLocations } from "@/lib/geo"
 import { formatBytes, formatBps } from "@/lib/format"
 import { OnlineDot, PlatformBadge, VpnStatePill } from "@/components/fleet/device-badges"
@@ -18,7 +25,7 @@ function lastSeen(device: FleetDevice): string {
 }
 
 function isFleetOnline(device: FleetDevice): boolean {
-  return device.last_trigger === "external_proxy" || isOnline(device.last_seen_at)
+  return isExternalProxyDevice(device) || isOnline(device.last_seen_at)
 }
 
 /** Real reported speed/traffic, or a stable placeholder seeded by the device, so
