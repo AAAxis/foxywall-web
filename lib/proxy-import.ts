@@ -1,8 +1,8 @@
 export type ProxyImportRow = {
   id: string
+  city: string | null
   country: string
   country_code: string
-  city: string | null
   host: string
   port: number
   username: string
@@ -103,9 +103,9 @@ export function parseProxyImportCsv(text: string): ProxyImportRow[] {
 
     return [{
       id: `socks-${countryCode.toLowerCase()}-${safeId(sourceId)}`,
+      city: null,
       country: countryName(countryCode),
       country_code: countryCode,
-      city: null,
       host,
       port,
       username,

@@ -56,6 +56,7 @@ function uniqueFilterValues(rows: FleetTableRow[], key: FilterKey): string[] {
 export function FleetTable({ rows }: { rows: FleetTableRow[] }) {
   const [activeFilter, setActiveFilter] = useState<FilterKey | null>(null)
   const [filters, setFilters] = useState<Partial<Record<FilterKey, string>>>({})
+  const activeFilterCount = Object.values(filters).filter(Boolean).length
 
   const filteredRows = useMemo(
     () =>
@@ -90,6 +91,22 @@ export function FleetTable({ rows }: { rows: FleetTableRow[] }) {
 
   return (
     <div className="overflow-x-auto rounded-lg border border-white/10">
+      {activeFilterCount > 0 ? (
+        <div className="flex items-center gap-2 border-b border-white/10 bg-orange-500/10 px-4 py-2 text-xs text-white/70">
+          <span>{activeFilterCount} filter{activeFilterCount === 1 ? "" : "s"} active</span>
+          <button
+            type="button"
+            onClick={() => {
+              setFilters({})
+              setActiveFilter(null)
+            }}
+            className="rounded-md bg-orange-500 px-2.5 py-1 font-medium text-black hover:bg-orange-400"
+          >
+            Reset filters
+          </button>
+        </div>
+      ) : null}
+
       {activeFilter ? (
         <div className="flex flex-wrap items-center gap-2 border-b border-white/10 bg-white/[0.03] px-4 py-3 text-sm">
           <span className="text-white/60">
@@ -103,6 +120,16 @@ export function FleetTable({ rows }: { rows: FleetTableRow[] }) {
             }`}
           >
             All
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setFilters({})
+              setActiveFilter(null)
+            }}
+            className="rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white/75 ring-1 ring-inset ring-white/15 hover:bg-white/15"
+          >
+            Reset
           </button>
           {activeValues.map((value) => {
             const selected = filters[activeFilter] === value

@@ -153,6 +153,7 @@ export async function getProxyServerFleetDevices(): Promise<FleetDevice[]> {
     .from("proxy_servers")
     .select("id,country,country_code,city,host,port,username,password,enabled")
     .eq("enabled", true)
+    .like("id", "socks-%")
     .order("sort", { ascending: true })
 
   if (error) throw new Error(error.message)
