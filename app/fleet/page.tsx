@@ -1,4 +1,3 @@
-import type { ReactNode } from "react"
 import { formatDistanceToNow } from "date-fns"
 import {
   getFleetDevices,
@@ -10,10 +9,9 @@ import {
 } from "@/lib/fleet"
 import { resolveLocations } from "@/lib/geo"
 import { formatBytes, formatBps } from "@/lib/format"
-import { OnlineDot, PlatformBadge, VpnStatePill } from "@/components/fleet/device-badges"
-import { CopyProxyButton } from "@/components/fleet/copy-proxy-button"
 import { ExportIpsButton, type ExportRow } from "@/components/fleet/export-ips-button"
 import { ImportProxiesButton } from "@/components/fleet/import-proxies-button"
+import { FleetTable, type FleetTableRow } from "@/components/fleet/fleet-table"
 
 export const dynamic = "force-dynamic"
 export const metadata = { title: "Fleet — FoxyWall", robots: { index: false } }
@@ -74,6 +72,31 @@ export default async function FleetPage() {
       lastSeen: d.last_seen_at ?? "",
     }))
 
+  const tableRows: FleetTableRow[] = devices.map((d) => {
+    const m = deviceMetrics(d)
+    return {
+      id: d.id,
+      device: d.device_name ?? "Unnamed",
+      secondary: d.company?.name ?? d.device_id,
+      proxyUri: proxyUri(d),
+      gatewayHost: d.gateway_host,
+      socksPort: d.socks_port,
+      socksUser: d.socks_user,
+      socksPass: d.socks_pass,
+      mac: d.mac_address,
+      platform: d.device_type,
+      online: isFleetOnline(d),
+      publicIp: d.public_ip,
+      location: d.public_ip ? locations.get(d.public_ip) ?? "" : "",
+      speed: `↓ ${formatBps(m.down)} · ↑ ${formatBps(m.up)}`,
+      traffic: formatBytes(m.rx + m.tx),
+      trafficDetail: `↓ ${formatBytes(m.rx)} · ↑ ${formatBytes(m.tx)}`,
+      vpnState: d.vpn_state,
+      version: d.app_version,
+      lastSeen: lastSeen(d),
+    }
+  })
+
   return (
     <main className="mx-auto max-w-7xl px-6 py-10 text-white">
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
@@ -103,74 +126,10 @@ export default async function FleetPage() {
           No devices enrolled yet. Enroll a device with a provision code to see it here.
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-lg border border-white/10">
-          <table className="w-full min-w-[1100px] text-left text-sm text-white">
-            <thead className="bg-white/5 text-xs uppercase tracking-wide text-white/70">
-              <tr>
-                <Th>Device</Th>
-                <Th>Proxy</Th>
-                <Th>MAC</Th>
-                <Th>Platform</Th>
-                <Th>Status</Th>
-                <Th>Public IP</Th>
-                <Th>Location</Th>
-                <Th>Speed</Th>
-                <Th>Traffic</Th>
-                <Th>VPN</Th>
-                <Th>Version</Th>
-                <Th>Last seen</Th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/10">
-              {devices.map((d) => {
-                const m = deviceMetrics(d)
-                return (
-                <tr key={d.id} className="hover:bg-white/5">
-                  <td className="px-4 py-3">
-                    <div className="font-medium text-white">{d.device_name ?? "Unnamed"}</div>
-                    <div className="font-mono text-xs text-white/50">{d.company?.name ?? d.device_id}</div>
-                  </td>
-                  <td className="px-4 py-3">
-                    <CopyProxyButton
-                      uri={proxyUri(d)}
-                      host={d.gateway_host}
-                      port={d.socks_port}
-                      user={d.socks_user}
-                      pass={d.socks_pass}
-                    />
-                  </td>
-                  <td className="px-4 py-3 font-mono text-xs text-white/80">{d.mac_address ?? "—"}</td>
-                  <td className="px-4 py-3"><PlatformBadge type={d.device_type} /></td>
-                  <td className="px-4 py-3"><OnlineDot online={isFleetOnline(d)} /></td>
-                  <td className="px-4 py-3 font-mono text-xs text-white/80">{d.public_ip ?? "—"}</td>
-                  <td className="px-4 py-3 text-white/80">
-                    {d.public_ip ? locations.get(d.public_ip) ?? "—" : "—"}
-                  </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-xs text-white/80">
-                    <span>↓ {formatBps(m.down)} · ↑ {formatBps(m.up)}</span>
-                  </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-white/80">
-                    <div className="font-medium text-white">{formatBytes(m.rx + m.tx)}</div>
-                    <div className="text-xs text-white/50">
-                      ↓ {formatBytes(m.rx)} · ↑ {formatBytes(m.tx)}
-                    </div>
-                  </td>
-                  <td className="px-4 py-3"><VpnStatePill state={d.vpn_state} /></td>
-                  <td className="px-4 py-3 text-white/80">{d.app_version ?? "—"}</td>
-                  <td className="px-4 py-3 whitespace-nowrap text-white/70">{lastSeen(d)}</td>
-                </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
+        <FleetTable rows={tableRows} />
       )}
     </main>
   )
-}
-
-function Th({ children }: { children: ReactNode }) {
-  return <th className="px-4 py-3 font-medium">{children}</th>
 }
 
 function Stat({ label, value }: { label: string; value: string }) {
