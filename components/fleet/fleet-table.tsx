@@ -208,10 +208,6 @@ export function FleetTable({ rows }: { rows: FleetTableRow[] }) {
               <td className="px-4 py-3">
                 <CopyProxyButton
                   uri={row.proxyUri}
-                  host={row.gatewayHost}
-                  port={row.socksPort}
-                  user={row.socksUser}
-                  pass={row.socksPass}
                 />
               </td>
               <td className="px-4 py-3 font-mono text-xs text-white/80">{row.mac ?? "—"}</td>
