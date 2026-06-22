@@ -2,6 +2,7 @@ import { formatDistanceToNow } from "date-fns"
 import {
   getFleetDevices,
   getProxyServerFleetDevices,
+  getProxyLineFleetDevices,
   dedupeByDevice,
   isExternalProxyDevice,
   isOnline,
@@ -18,13 +19,14 @@ export const dynamic = "force-dynamic"
 export const metadata = { title: "Fleet — FoxyWall", robots: { index: false } }
 
 function lastSeen(device: FleetDevice): string {
+  if (device.last_trigger === "proxyline") return "ProxyLine active"
   if (device.last_trigger === "external_proxy") return "always online"
   if (!device.last_seen_at) return "never"
   return `${formatDistanceToNow(new Date(device.last_seen_at))} ago`
 }
 
 function isFleetOnline(device: FleetDevice): boolean {
-  return isExternalProxyDevice(device) || isOnline(device.last_seen_at)
+  return device.last_trigger === "proxyline" || isExternalProxyDevice(device) || isOnline(device.last_seen_at)
 }
 
 /** Real reported speed/traffic, or a stable placeholder seeded by the device, so
@@ -50,11 +52,12 @@ export default async function FleetPage() {
     // Collapses same-device re-enrollments that minted new device_ids and carries
     // the proxy assignment forward. A device must have a MAC (real unique ID) to
     // be listed — drops test/incomplete enrollments with no MAC.
+    const proxyline = await getProxyLineFleetDevices()
     const imported = await getProxyServerFleetDevices()
     const internal = dedupeByDevice((await getFleetDevices()).filter((d) => !isExternalProxyDevice(d))).filter(
       (d) => !!d.mac_address,
     )
-    devices = [...imported, ...internal]
+    devices = [...proxyline, ...imported, ...internal]
   } catch (e) {
     error = e instanceof Error ? e.message : "Failed to load devices."
   }
@@ -99,7 +102,7 @@ export default async function FleetPage() {
       vpnState: d.vpn_state,
       version: d.app_version,
       lastSeen: lastSeen(d),
-      source: isExternalProxyDevice(d) ? "imported" : "internal",
+      source: d.last_trigger === "proxyline" ? "proxyline" : isExternalProxyDevice(d) ? "imported" : "internal",
     }
   })
 

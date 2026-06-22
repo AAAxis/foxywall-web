@@ -40,6 +40,30 @@ type ProxyServer = {
   enabled: boolean
 }
 
+type ProxyLineResponse = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: ProxyLineProxy[]
+}
+
+type ProxyLineProxy = {
+  id: number
+  ip: string
+  internal_ip: string | null
+  port_http: number | null
+  port_socks5: number | null
+  user?: string
+  username: string
+  password: string
+  order_id: number
+  type: string
+  ip_version: number
+  country: string
+  date: string
+  date_end: string
+}
+
 /** Builds the SOCKS5 connection URI for a device, or "" if no gateway assigned. */
 export function proxyUri(d: FleetDevice): string {
   if (!d.gateway_host || !d.socks_port || !d.socks_user || !d.socks_pass) return ""
@@ -184,4 +208,64 @@ export async function getProxyServerFleetDevices(): Promise<FleetDevice[]> {
     enrolled_at: new Date().toISOString(),
     company: { name: proxy.city ? `${proxy.city}, ${proxy.country}` : proxy.country },
   }))
+}
+
+export async function getProxyLineFleetDevices(): Promise<FleetDevice[]> {
+  const apiKey = process.env.PROXYLINE_API_KEY
+  if (!apiKey) return []
+
+  const proxies: ProxyLineProxy[] = []
+  const limit = 2000
+  let offset = 0
+
+  while (true) {
+    const url = new URL("https://panel.proxyline.net/api/proxies/")
+    url.searchParams.set("status", "active")
+    url.searchParams.set("limit", String(limit))
+    url.searchParams.set("offset", String(offset))
+
+    const res = await fetch(url, {
+      headers: { "API-KEY": apiKey },
+      next: { revalidate: 60 },
+    })
+    if (!res.ok) {
+      throw new Error(`ProxyLine request failed (${res.status})`)
+    }
+
+    const page = (await res.json()) as ProxyLineResponse
+    proxies.push(...(page.results ?? []))
+    if (!page.next || proxies.length >= (page.count ?? proxies.length)) break
+    offset += limit
+  }
+
+  return proxies
+    .filter((proxy) => proxy.ip && proxy.port_socks5 && proxy.username && proxy.password)
+    .map((proxy, index) => {
+      const countryCode = proxy.country.toUpperCase()
+      return {
+        id: `proxyline-${proxy.id}`,
+        company_id: "proxyline",
+        account_id: "PROXYLINE",
+        device_id: `proxyline-${proxy.id}`,
+        device_name: `ProxyLine ${countryCode} ${index + 1}`,
+        device_type: "linux",
+        app_version: "proxyline",
+        public_ip: proxy.ip,
+        vpn_state: "on",
+        last_trigger: "proxyline",
+        rx_bytes: null,
+        tx_bytes: null,
+        speed_down_bps: null,
+        speed_up_bps: null,
+        mac_address: virtualMac(`proxyline-${proxy.id}`),
+        last_seen_at: new Date().toISOString(),
+        gateway_host: proxy.ip,
+        socks_port: proxy.port_socks5,
+        socks_user: proxy.username,
+        socks_pass: proxy.password,
+        exit_enabled: true,
+        enrolled_at: proxy.date,
+        company: { name: `ProxyLine order ${proxy.order_id}` },
+      } satisfies FleetDevice
+    })
 }

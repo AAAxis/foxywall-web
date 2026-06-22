@@ -25,7 +25,7 @@ export type FleetTableRow = {
   vpnState: FleetDevice["vpn_state"]
   version: string | null
   lastSeen: string
-  source: "imported" | "internal"
+  source: "proxyline" | "imported" | "internal"
 }
 
 type FilterKey = "device" | "proxy" | "mac" | "platform" | "status" | "publicIp" | "location" | "speed"
@@ -55,10 +55,11 @@ function uniqueFilterValues(rows: FleetTableRow[], key: FilterKey): string[] {
 }
 
 export function FleetTable({ rows }: { rows: FleetTableRow[] }) {
-  const [tab, setTab] = useState<"imported" | "internal">("imported")
+  const [tab, setTab] = useState<"proxyline" | "imported" | "internal">("proxyline")
   const [activeFilter, setActiveFilter] = useState<FilterKey | null>(null)
   const [filters, setFilters] = useState<Partial<Record<FilterKey, string>>>({})
   const activeFilterCount = Object.values(filters).filter(Boolean).length
+  const proxyLineCount = rows.filter((row) => row.source === "proxyline").length
   const importedCount = rows.filter((row) => row.source === "imported").length
   const internalCount = rows.filter((row) => row.source === "internal").length
   const tabRows = useMemo(() => rows.filter((row) => row.source === tab), [rows, tab])
@@ -98,6 +99,7 @@ export function FleetTable({ rows }: { rows: FleetTableRow[] }) {
     <div className="overflow-x-auto rounded-lg border border-white/10">
       <div className="flex items-center gap-2 border-b border-white/10 bg-white/[0.03] px-4 py-3">
         {[
+          { key: "proxyline" as const, label: "ProxyLine", count: proxyLineCount },
           { key: "imported" as const, label: "Imported proxies", count: importedCount },
           { key: "internal" as const, label: "Internal devices", count: internalCount },
         ].map((item) => (
@@ -205,7 +207,7 @@ export function FleetTable({ rows }: { rows: FleetTableRow[] }) {
                 <div className="font-medium text-white">{row.device}</div>
                 <div className="font-mono text-xs text-white/50">{row.secondary}</div>
               </td>
-              <td className="px-4 py-3">
+              <td className="min-w-[150px] whitespace-nowrap px-4 py-3">
                 <CopyProxyButton
                   uri={row.proxyUri}
                 />
