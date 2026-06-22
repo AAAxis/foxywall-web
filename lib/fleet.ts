@@ -1,6 +1,6 @@
 import { getSupabaseAdmin } from "./supabase-admin"
 
-export type DeviceType = "ios" | "android" | "windows" | "macos" | "other"
+export type DeviceType = "ios" | "android" | "windows" | "macos" | "linux" | "other"
 
 export type FleetDevice = {
   id: string

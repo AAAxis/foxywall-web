@@ -12,8 +12,13 @@ export const dynamic = "force-dynamic"
 export const metadata = { title: "Fleet — FoxyWall", robots: { index: false } }
 
 function lastSeen(device: FleetDevice): string {
+  if (device.last_trigger === "external_proxy") return "always online"
   if (!device.last_seen_at) return "never"
   return `${formatDistanceToNow(new Date(device.last_seen_at))} ago`
+}
+
+function isFleetOnline(device: FleetDevice): boolean {
+  return device.last_trigger === "external_proxy" || isOnline(device.last_seen_at)
 }
 
 /** Real reported speed/traffic, or a stable placeholder seeded by the device, so
@@ -44,7 +49,7 @@ export default async function FleetPage() {
     error = e instanceof Error ? e.message : "Failed to load devices."
   }
 
-  const online = devices.filter((d) => isOnline(d.last_seen_at)).length
+  const online = devices.filter(isFleetOnline).length
   const locations = error ? new Map<string, string>() : await resolveLocations(devices.map((d) => d.public_ip))
 
   // Spreadsheet export: unique exit IPs with their proxy links.
@@ -129,7 +134,7 @@ export default async function FleetPage() {
                   </td>
                   <td className="px-4 py-3 font-mono text-xs text-white/80">{d.mac_address ?? "—"}</td>
                   <td className="px-4 py-3"><PlatformBadge type={d.device_type} /></td>
-                  <td className="px-4 py-3"><OnlineDot online={isOnline(d.last_seen_at)} /></td>
+                  <td className="px-4 py-3"><OnlineDot online={isFleetOnline(d)} /></td>
                   <td className="px-4 py-3 font-mono text-xs text-white/80">{d.public_ip ?? "—"}</td>
                   <td className="px-4 py-3 text-white/80">
                     {d.public_ip ? locations.get(d.public_ip) ?? "—" : "—"}

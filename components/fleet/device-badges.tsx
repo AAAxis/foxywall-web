@@ -5,6 +5,7 @@ const PLATFORM: Record<DeviceType, { label: string; glyph: string; className: st
   android: { label: "Android", glyph: "🤖", className: "bg-emerald-500/20 ring-emerald-400/40" },
   ios: { label: "iOS", glyph: "", className: "bg-white/10 ring-white/30" },
   macos: { label: "macOS", glyph: "", className: "bg-indigo-500/20 ring-indigo-400/40" },
+  linux: { label: "Linux", glyph: "🐧", className: "bg-amber-500/20 ring-amber-400/40" },
   other: { label: "Other", glyph: "💻", className: "bg-white/10 ring-white/20" },
 }
 
