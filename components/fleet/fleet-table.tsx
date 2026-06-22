@@ -188,6 +188,7 @@ export function FleetTable({ rows }: { rows: FleetTableRow[] }) {
           <tr>
             {header("Device", "device")}
             {header("Proxy", "proxy")}
+            {header("Open")}
             {header("MAC", "mac")}
             {header("Platform", "platform")}
             {header("Status", "status")}
@@ -211,6 +212,19 @@ export function FleetTable({ rows }: { rows: FleetTableRow[] }) {
                 <CopyProxyButton
                   uri={row.proxyUri}
                 />
+              </td>
+              <td className="whitespace-nowrap px-4 py-3">
+                {row.proxyUri ? (
+                  <button
+                    type="button"
+                    data-foxy-open-uri={row.proxyUri}
+                    className="rounded-md bg-orange-500 px-2.5 py-1 text-xs font-bold text-black hover:bg-orange-400"
+                  >
+                    Open
+                  </button>
+                ) : (
+                  <span className="text-xs text-white/30">—</span>
+                )}
               </td>
               <td className="px-4 py-3 font-mono text-xs text-white/80">{row.mac ?? "—"}</td>
               <td className="px-4 py-3"><PlatformBadge type={row.platform} /></td>
