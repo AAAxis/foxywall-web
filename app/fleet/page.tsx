@@ -6,6 +6,7 @@ import { formatBytes, formatBps } from "@/lib/format"
 import { OnlineDot, PlatformBadge, VpnStatePill } from "@/components/fleet/device-badges"
 import { CopyProxyButton } from "@/components/fleet/copy-proxy-button"
 import { ExportIpsButton, type ExportRow } from "@/components/fleet/export-ips-button"
+import { ImportProxiesButton } from "@/components/fleet/import-proxies-button"
 
 export const dynamic = "force-dynamic"
 export const metadata = { title: "Fleet — FoxyWall", robots: { index: false } }
@@ -71,6 +72,7 @@ export default async function FleetPage() {
         <div className="flex items-center gap-6 text-sm">
           <Stat label="Devices" value={String(devices.length)} />
           <Stat label="Online" value={String(online)} />
+          <ImportProxiesButton />
           <ExportIpsButton rows={exportRows} />
         </div>
       </div>
