@@ -87,6 +87,26 @@ export function isOnline(lastSeenAt: string | null): boolean {
   return Date.now() - new Date(lastSeenAt).getTime() < ONLINE_WINDOW_MS
 }
 
+function isExternalProxyDevice(device: FleetDevice): boolean {
+  return (
+    device.account_id === "EXTERNAL-PROXIES" ||
+    device.last_trigger === "external_proxy" ||
+    device.app_version === "external-proxy" ||
+    device.device_id.startsWith("external-proxy-")
+  )
+}
+
+function normalizeFleetDevice(device: FleetDevice): FleetDevice {
+  if (!isExternalProxyDevice(device)) return device
+  return {
+    ...device,
+    device_type: "linux",
+    vpn_state: device.vpn_state ?? "on",
+    last_trigger: "external_proxy",
+    last_seen_at: device.last_seen_at ?? new Date().toISOString(),
+  }
+}
+
 /** Fetches all fleet devices (newest heartbeat first). Server-only. */
 export async function getFleetDevices(): Promise<FleetDevice[]> {
   const supabase = getSupabaseAdmin()
@@ -96,5 +116,5 @@ export async function getFleetDevices(): Promise<FleetDevice[]> {
     .order("last_seen_at", { ascending: false, nullsFirst: false })
 
   if (error) throw new Error(error.message)
-  return (data ?? []) as FleetDevice[]
+  return ((data ?? []) as FleetDevice[]).map(normalizeFleetDevice)
 }
