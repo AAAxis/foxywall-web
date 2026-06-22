@@ -25,6 +25,7 @@ export type FleetTableRow = {
   vpnState: FleetDevice["vpn_state"]
   version: string | null
   lastSeen: string
+  source: "imported" | "internal"
 }
 
 type FilterKey = "device" | "proxy" | "mac" | "platform" | "status" | "publicIp" | "location" | "speed"
@@ -54,21 +55,25 @@ function uniqueFilterValues(rows: FleetTableRow[], key: FilterKey): string[] {
 }
 
 export function FleetTable({ rows }: { rows: FleetTableRow[] }) {
+  const [tab, setTab] = useState<"imported" | "internal">("imported")
   const [activeFilter, setActiveFilter] = useState<FilterKey | null>(null)
   const [filters, setFilters] = useState<Partial<Record<FilterKey, string>>>({})
   const activeFilterCount = Object.values(filters).filter(Boolean).length
+  const importedCount = rows.filter((row) => row.source === "imported").length
+  const internalCount = rows.filter((row) => row.source === "internal").length
+  const tabRows = useMemo(() => rows.filter((row) => row.source === tab), [rows, tab])
 
   const filteredRows = useMemo(
     () =>
-      rows.filter((row) =>
+      tabRows.filter((row) =>
         Object.entries(filters).every(([key, value]) => !value || (filterValue(row, key as FilterKey) || "—") === value),
       ),
-    [filters, rows],
+    [filters, tabRows],
   )
 
   const activeValues = useMemo(
-    () => (activeFilter ? uniqueFilterValues(rows, activeFilter) : []),
-    [activeFilter, rows],
+    () => (activeFilter ? uniqueFilterValues(tabRows, activeFilter) : []),
+    [activeFilter, tabRows],
   )
 
   function header(label: string, key?: FilterKey) {
@@ -91,6 +96,30 @@ export function FleetTable({ rows }: { rows: FleetTableRow[] }) {
 
   return (
     <div className="overflow-x-auto rounded-lg border border-white/10">
+      <div className="flex items-center gap-2 border-b border-white/10 bg-white/[0.03] px-4 py-3">
+        {[
+          { key: "imported" as const, label: "Imported proxies", count: importedCount },
+          { key: "internal" as const, label: "Internal devices", count: internalCount },
+        ].map((item) => (
+          <button
+            key={item.key}
+            type="button"
+            onClick={() => {
+              setTab(item.key)
+              setFilters({})
+              setActiveFilter(null)
+            }}
+            className={`rounded-md px-3 py-1.5 text-sm font-medium ${
+              tab === item.key
+                ? "bg-orange-500 text-black"
+                : "bg-white/10 text-white/70 hover:bg-white/15"
+            }`}
+          >
+            {item.label} ({item.count})
+          </button>
+        ))}
+      </div>
+
       {activeFilterCount > 0 ? (
         <div className="flex items-center gap-2 border-b border-white/10 bg-orange-500/10 px-4 py-2 text-xs text-white/70">
           <span>{activeFilterCount} filter{activeFilterCount === 1 ? "" : "s"} active</span>

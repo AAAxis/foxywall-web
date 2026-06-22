@@ -50,7 +50,11 @@ export default async function FleetPage() {
     // Collapses same-device re-enrollments that minted new device_ids and carries
     // the proxy assignment forward. A device must have a MAC (real unique ID) to
     // be listed — drops test/incomplete enrollments with no MAC.
-    devices = dedupeByDevice([...(await getProxyServerFleetDevices()), ...(await getFleetDevices())]).filter((d) => !!d.mac_address)
+    const imported = await getProxyServerFleetDevices()
+    const internal = dedupeByDevice((await getFleetDevices()).filter((d) => !isExternalProxyDevice(d))).filter(
+      (d) => !!d.mac_address,
+    )
+    devices = [...imported, ...internal]
   } catch (e) {
     error = e instanceof Error ? e.message : "Failed to load devices."
   }
@@ -95,6 +99,7 @@ export default async function FleetPage() {
       vpnState: d.vpn_state,
       version: d.app_version,
       lastSeen: lastSeen(d),
+      source: isExternalProxyDevice(d) ? "imported" : "internal",
     }
   })
 
