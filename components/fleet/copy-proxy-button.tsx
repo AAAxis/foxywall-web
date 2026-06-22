@@ -29,9 +29,10 @@ export function CopyProxyButton({
     <button
       onClick={() => copy(uri)}
       title={uri}
+      data-foxy-proxy-uri={uri}
       className="whitespace-nowrap rounded-md bg-emerald-500/20 px-2.5 py-1 text-xs font-medium text-white ring-1 ring-inset ring-emerald-400/40 hover:bg-emerald-500/30"
     >
-      {copied ? "Copied ✓" : "Copy proxy"}
+      {copied ? "Copied ✓" : "Proxy"}
     </button>
   )
 }
