@@ -28,6 +28,18 @@ export type FleetDevice = {
   company?: { name: string } | null
 }
 
+type ProxyServer = {
+  id: string
+  country: string
+  country_code: string
+  city: string | null
+  host: string
+  port: number
+  username: string
+  password: string
+  enabled: boolean
+}
+
 /** Builds the SOCKS5 connection URI for a device, or "" if no gateway assigned. */
 export function proxyUri(d: FleetDevice): string {
   if (!d.gateway_host || !d.socks_port || !d.socks_user || !d.socks_pass) return ""
@@ -95,6 +107,13 @@ function sameHost(a: string | null | undefined, b: string | null | undefined): b
   return !!a && !!b && a.trim().toLowerCase() === b.trim().toLowerCase()
 }
 
+function virtualMac(seed: string): string {
+  let hash = 0
+  for (let i = 0; i < seed.length; i++) hash = (hash * 31 + seed.charCodeAt(i)) >>> 0
+  const hex = hash.toString(16).padStart(12, "0").slice(-12).toUpperCase()
+  return hex.match(/.{1,2}/g)?.join(":") ?? hex
+}
+
 export function isExternalProxyDevice(device: FleetDevice): boolean {
   return (
     device.account_id === "EXTERNAL-PROXIES" ||
@@ -126,4 +145,42 @@ export async function getFleetDevices(): Promise<FleetDevice[]> {
 
   if (error) throw new Error(error.message)
   return ((data ?? []) as FleetDevice[]).map(normalizeFleetDevice)
+}
+
+export async function getProxyServerFleetDevices(): Promise<FleetDevice[]> {
+  const supabase = getSupabaseAdmin()
+  const { data, error } = await supabase
+    .from("proxy_servers")
+    .select("id,country,country_code,city,host,port,username,password,enabled")
+    .eq("enabled", true)
+    .order("sort", { ascending: true })
+
+  if (error) throw new Error(error.message)
+
+  return ((data ?? []) as ProxyServer[]).map((proxy, index) => ({
+    id: `proxy-server-${proxy.id}`,
+    company_id: "external-proxies",
+    account_id: "EXTERNAL-PROXIES",
+    device_id: `external-proxy-${proxy.id}`,
+    device_name: `External ${proxy.country_code} ${index + 1}`,
+    device_type: "linux",
+    device_token: "",
+    app_version: "external-proxy",
+    public_ip: proxy.host,
+    vpn_state: "on",
+    last_trigger: "external_proxy",
+    rx_bytes: null,
+    tx_bytes: null,
+    speed_down_bps: null,
+    speed_up_bps: null,
+    mac_address: virtualMac(proxy.id),
+    last_seen_at: new Date().toISOString(),
+    gateway_host: proxy.host,
+    socks_port: proxy.port,
+    socks_user: proxy.username,
+    socks_pass: proxy.password,
+    exit_enabled: true,
+    enrolled_at: new Date().toISOString(),
+    company: { name: proxy.city ? `${proxy.city}, ${proxy.country}` : proxy.country },
+  }))
 }

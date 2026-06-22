@@ -1,6 +1,7 @@
 import { formatDistanceToNow } from "date-fns"
 import {
   getFleetDevices,
+  getProxyServerFleetDevices,
   dedupeByDevice,
   isExternalProxyDevice,
   isOnline,
@@ -49,7 +50,7 @@ export default async function FleetPage() {
     // Collapses same-device re-enrollments that minted new device_ids and carries
     // the proxy assignment forward. A device must have a MAC (real unique ID) to
     // be listed — drops test/incomplete enrollments with no MAC.
-    devices = dedupeByDevice(await getFleetDevices()).filter((d) => !!d.mac_address)
+    devices = dedupeByDevice([...(await getProxyServerFleetDevices()), ...(await getFleetDevices())]).filter((d) => !!d.mac_address)
   } catch (e) {
     error = e instanceof Error ? e.message : "Failed to load devices."
   }
