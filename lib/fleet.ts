@@ -67,7 +67,8 @@ type ProxyLineProxy = {
 /** Builds the SOCKS5 connection URI for a device, or "" if no gateway assigned. */
 export function proxyUri(d: FleetDevice): string {
   if (!d.gateway_host || !d.socks_port || !d.socks_user || !d.socks_pass) return ""
-  return `socks5://${d.socks_user}:${d.socks_pass}@${d.gateway_host}:${d.socks_port}`
+  const host = d.gateway_host.includes(":") && !d.gateway_host.startsWith("[") ? `[${d.gateway_host}]` : d.gateway_host
+  return `socks5://${encodeURIComponent(d.socks_user)}:${encodeURIComponent(d.socks_pass)}@${host}:${d.socks_port}`
 }
 
 /** Normalizes a MAC for identity comparison: strips separators, upper-cases.
