@@ -86,7 +86,7 @@ export function Pricing() {
                 )}
               </div>
 
-              <ul className="space-y-3.5 mb-8">
+              <ul className="space-y-3.5">
                 {perks.map((perk, i) => (
                   <motion.li
                     key={perk}
@@ -103,16 +103,14 @@ export function Pricing() {
                 ))}
               </ul>
 
-              <span
-                aria-disabled="true"
-                className={`w-full inline-flex items-center justify-center gap-2 rounded-full py-3 font-semibold opacity-60 cursor-not-allowed ${
-                  plan.popular ? "bg-primary text-primary-foreground" : "bg-foreground text-background"
-                }`}
-              >
-                {t("comingSoon")}
-              </span>
             </motion.div>
           ))}
+        </div>
+
+        <div className="text-center mt-12">
+          <span className="inline-block bg-primary text-primary-foreground rounded-full px-10 py-4 text-lg font-semibold">
+            {t("comingSoon")}
+          </span>
         </div>
       </div>
     </section>

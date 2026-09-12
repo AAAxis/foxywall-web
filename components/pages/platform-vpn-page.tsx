@@ -2,7 +2,6 @@
 
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { Button } from "@/components/ui/button"
 import { LanguageProvider, useLanguage } from "@/lib/language-context"
 import type { Language } from "@/lib/translations"
 import {
@@ -55,13 +54,6 @@ function Content({ platform }: { platform: VpnPlatform }) {
     { icon: HighlightIcon, title: t(c.highlightTitleKey), body: t(c.highlightBodyKey) },
   ]
 
-  const downloadButton = () => (
-    <Button disabled className="bg-primary text-primary-foreground rounded-full px-8 py-3 font-semibold gap-2">
-      <Icon className="w-5 h-5" />
-      {t("comingSoon")}
-    </Button>
-  )
-
   return (
     <section className="pt-28 pb-20 md:pt-36">
       <div className="container mx-auto px-6">
@@ -76,8 +68,9 @@ function Content({ platform }: { platform: VpnPlatform }) {
           <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto leading-relaxed">
             {t(c.subtitleKey)}
           </p>
-          <div className="flex justify-center">{downloadButton()}</div>
-          <p className="text-xs text-muted-foreground mt-4">{t(c.requirementsKey)}</p>
+          <div className="inline-block bg-primary text-primary-foreground rounded-full px-10 py-4 text-lg font-semibold">
+            {t("comingSoon")}
+          </div>
         </div>
 
         {/* Why grid */}
@@ -91,13 +84,6 @@ function Content({ platform }: { platform: VpnPlatform }) {
               <p className="text-sm text-muted-foreground leading-relaxed">{r.body}</p>
             </div>
           ))}
-        </div>
-
-        {/* Install + CTA */}
-        <div className="max-w-3xl mx-auto mt-20 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">{t("vpnGetTitle")}</h2>
-          <p className="text-sm text-muted-foreground mb-8 leading-relaxed">{t(c.installKey)}</p>
-          <div className="flex justify-center">{downloadButton()}</div>
         </div>
       </div>
     </section>

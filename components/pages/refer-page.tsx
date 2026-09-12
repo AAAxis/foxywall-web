@@ -38,12 +38,8 @@ export function ReferPage() {
           <div className="text-[#666] text-sm">FoxyWall VPN Premium • Free</div>
         </div>
 
-        <div className="block w-full py-[18px] bg-gradient-to-r from-[#ff6b35] to-[#ff8f35] text-white rounded-[14px] text-lg font-bold text-center mb-3 opacity-60 cursor-not-allowed">
-          🍎 iPhone · Coming Soon
-        </div>
-
-        <div className="block w-full py-4 bg-[#1a1a1a] border-2 border-[#333] text-white rounded-[14px] text-base font-semibold text-center mb-8 opacity-60 cursor-not-allowed">
-          🤖 Android · Coming Soon
+        <div className="block w-full py-[18px] bg-gradient-to-r from-[#ff6b35] to-[#ff8f35] text-white rounded-[14px] text-lg font-bold text-center mb-8">
+          Coming Soon
         </div>
 
         <div className="text-left mb-8">
@@ -73,7 +69,6 @@ export function ReferPage() {
               Holylabs Ltd
             </a>
           </p>
-          <p className="mt-2">App Store · Google Play — Coming Soon</p>
         </div>
       </div>
     </div>
