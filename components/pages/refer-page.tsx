@@ -9,7 +9,7 @@ const features = [
 ]
 
 const steps = [
-  'Tap "Redeem on iPhone" above',
+  "Get FoxyWall when it launches",
   "Sign in with your Apple ID",
   "FoxyWall installs automatically",
   "Open the app & connect 🚀",
@@ -38,19 +38,13 @@ export function ReferPage() {
           <div className="text-[#666] text-sm">FoxyWall VPN Premium • Free</div>
         </div>
 
-        <a
-          href="https://apps.apple.com/redeem?ctx=offercodes&id=6757646633&code=FOXY30"
-          className="block w-full py-[18px] bg-gradient-to-r from-[#ff6b35] to-[#ff8f35] text-white rounded-[14px] text-lg font-bold text-center no-underline mb-3 hover:translate-y-[-2px] hover:shadow-[0_8px_30px_rgba(255,107,53,0.3)] transition-all"
-        >
-          🍎 Redeem on iPhone
-        </a>
+        <div className="block w-full py-[18px] bg-gradient-to-r from-[#ff6b35] to-[#ff8f35] text-white rounded-[14px] text-lg font-bold text-center mb-3 opacity-60 cursor-not-allowed">
+          🍎 iPhone · Coming Soon
+        </div>
 
-        <a
-          href="https://play.google.com/store/apps/details?id=com.theholylabs.rock"
-          className="block w-full py-4 bg-[#1a1a1a] border-2 border-[#333] text-white rounded-[14px] text-base font-semibold text-center no-underline mb-8 hover:border-[#ff6b35] transition-colors"
-        >
-          🤖 Get on Android
-        </a>
+        <div className="block w-full py-4 bg-[#1a1a1a] border-2 border-[#333] text-white rounded-[14px] text-base font-semibold text-center mb-8 opacity-60 cursor-not-allowed">
+          🤖 Android · Coming Soon
+        </div>
 
         <div className="text-left mb-8">
           <h3 className="text-sm text-[#666] uppercase tracking-widest mb-4">What you get</h3>
@@ -79,15 +73,7 @@ export function ReferPage() {
               Holylabs Ltd
             </a>
           </p>
-          <p className="mt-2">
-            <a href="https://apps.apple.com/app/id6757646633" className="text-[#666] no-underline">
-              App Store
-            </a>
-            {" · "}
-            <a href="https://play.google.com/store/apps/details?id=com.theholylabs.rock" className="text-[#666] no-underline">
-              Google Play
-            </a>
-          </p>
+          <p className="mt-2">App Store · Google Play — Coming Soon</p>
         </div>
       </div>
     </div>

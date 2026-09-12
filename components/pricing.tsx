@@ -1,22 +1,14 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useRef } from "react"
 import { motion, useInView } from "framer-motion"
-import { Check, Download } from "lucide-react"
+import { Check } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
-import { getStoreUrl } from "@/lib/device-utils"
-
-const DEFAULT_STORE_URL = "https://apps.apple.com/app/id6757646633"
 
 export function Pricing() {
   const { t } = useLanguage()
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
-  const [storeUrl, setStoreUrl] = useState(DEFAULT_STORE_URL)
-
-  useEffect(() => {
-    setStoreUrl(getStoreUrl())
-  }, [])
 
   const plans = [
     {
@@ -111,19 +103,14 @@ export function Pricing() {
                 ))}
               </ul>
 
-              <a
-                href={storeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`w-full inline-flex items-center justify-center gap-2 rounded-full py-3 font-semibold transition-colors ${
-                  plan.popular
-                    ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                    : "bg-foreground text-background hover:bg-foreground/90"
+              <span
+                aria-disabled="true"
+                className={`w-full inline-flex items-center justify-center gap-2 rounded-full py-3 font-semibold opacity-60 cursor-not-allowed ${
+                  plan.popular ? "bg-primary text-primary-foreground" : "bg-foreground text-background"
                 }`}
               >
-                <Download className="w-5 h-5" />
-                {t("download")}
-              </a>
+                {t("comingSoon")}
+              </span>
             </motion.div>
           ))}
         </div>

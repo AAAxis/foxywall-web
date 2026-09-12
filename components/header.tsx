@@ -7,7 +7,6 @@ import Link from "next/link"
 import Image from "next/image"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { useLanguage } from "@/lib/language-context"
-import { getStoreUrl } from "@/lib/device-utils"
 import { usePathname, useRouter } from "next/navigation"
 import { replaceLocaleInPathname } from "@/lib/i18n-routing"
 import type { Language } from "@/lib/translations"
@@ -19,11 +18,6 @@ export function Header({ languagePathOverrides }: { languagePathOverrides?: Blog
   const pathname = usePathname()
   const router = useRouter()
   const currentLang = languages.find((l) => l.code === language) || languages[0]
-
-  const handleStartClick = () => {
-    const url = getStoreUrl()
-    window.open(url, "_blank", "noopener,noreferrer")
-  }
 
   const getNextPath = (nextLanguage: Language) => {
     return languagePathOverrides?.[nextLanguage] ?? replaceLocaleInPathname(pathname, nextLanguage)
@@ -83,10 +77,10 @@ export function Header({ languagePathOverrides }: { languagePathOverrides?: Blog
           </DropdownMenu>
           <Button
             size="sm"
-            className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-6 font-semibold"
-            onClick={handleStartClick}
+            disabled
+            className="bg-primary text-primary-foreground rounded-full px-6 font-semibold"
           >
-            {t("start")}
+            {t("comingSoon")}
           </Button>
         </div>
 
@@ -110,8 +104,8 @@ export function Header({ languagePathOverrides }: { languagePathOverrides?: Blog
                   </button>
                 ))}
               </div>
-              <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-full font-semibold" onClick={handleStartClick}>
-                {t("start")}
+              <Button disabled className="w-full bg-primary text-primary-foreground rounded-full font-semibold">
+                {t("comingSoon")}
               </Button>
             </div>
           </div>

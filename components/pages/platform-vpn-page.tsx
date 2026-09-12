@@ -7,48 +7,34 @@ import { LanguageProvider, useLanguage } from "@/lib/language-context"
 import type { Language } from "@/lib/translations"
 import {
   Monitor, Apple, Chrome, Smartphone, ShieldCheck, EyeOff,
-  Infinity as InfinityIcon, Globe, Users, ArrowRight, Puzzle, BadgeCheck,
+  Infinity as InfinityIcon, Globe, Users, Puzzle, BadgeCheck,
 } from "lucide-react"
 
 export type VpnPlatform = "windows" | "macos" | "chrome" | "android" | "ios"
 
-const WINDOWS_DOWNLOAD_URL =
-  "https://github.com/AAAxis/foxywall-downloads/releases/latest/download/FoxyWallVPN-Setup.exe"
-const MACOS_DOWNLOAD_URL =
-  "https://github.com/AAAxis/foxywall-downloads/releases/latest/download/FoxyWall.dmg"
-const CHROME_EXTENSION_URL =
-  "https://chromewebstore.google.com/detail/foxywall-proxy/kehknicaphpgagjplpdanjpnpkchakib"
-const APP_STORE_URL = "https://apps.apple.com/app/id6757646633"
-const GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=com.theholylabs.rock"
-
 const CONFIG = {
   windows: {
-    url: WINDOWS_DOWNLOAD_URL, external: false, icon: Monitor, highlightIcon: BadgeCheck, name: "Windows",
-    downloadKey: "downloadForWindows",
+    icon: Monitor, highlightIcon: BadgeCheck, name: "Windows",
     titleKey: "windowsTitle", subtitleKey: "windowsSubtitle", requirementsKey: "windowsRequirements",
     installKey: "windowsInstall", highlightTitleKey: "windowsHighlightTitle", highlightBodyKey: "windowsHighlightBody",
   },
   macos: {
-    url: MACOS_DOWNLOAD_URL, external: false, icon: Apple, highlightIcon: BadgeCheck, name: "macOS",
-    downloadKey: "downloadForMacOS",
+    icon: Apple, highlightIcon: BadgeCheck, name: "macOS",
     titleKey: "macosTitle", subtitleKey: "macosSubtitle", requirementsKey: "macosRequirements",
     installKey: "macosInstall", highlightTitleKey: "macosHighlightTitle", highlightBodyKey: "macosHighlightBody",
   },
   chrome: {
-    url: CHROME_EXTENSION_URL, external: true, icon: Chrome, highlightIcon: Puzzle, name: "Google Chrome",
-    downloadKey: "downloadExtension",
+    icon: Chrome, highlightIcon: Puzzle, name: "Google Chrome",
     titleKey: "chromeTitle", subtitleKey: "chromeSubtitle", requirementsKey: "chromeRequirements",
     installKey: "chromeInstall", highlightTitleKey: "chromeHighlightTitle", highlightBodyKey: "chromeHighlightBody",
   },
   android: {
-    url: GOOGLE_PLAY_URL, external: true, icon: Smartphone, highlightIcon: Smartphone, name: "Android",
-    downloadKey: "googlePlay",
+    icon: Smartphone, highlightIcon: Smartphone, name: "Android",
     titleKey: "androidTitle", subtitleKey: "androidSubtitle", requirementsKey: "androidRequirements",
     installKey: "androidInstall", highlightTitleKey: "androidHighlightTitle", highlightBodyKey: "androidHighlightBody",
   },
   ios: {
-    url: APP_STORE_URL, external: true, icon: Apple, highlightIcon: Smartphone, name: "iOS",
-    downloadKey: "appStore",
+    icon: Apple, highlightIcon: Smartphone, name: "iOS",
     titleKey: "iosTitle", subtitleKey: "iosSubtitle", requirementsKey: "iosRequirements",
     installKey: "iosInstall", highlightTitleKey: "iosHighlightTitle", highlightBodyKey: "iosHighlightBody",
   },
@@ -69,14 +55,11 @@ function Content({ platform }: { platform: VpnPlatform }) {
     { icon: HighlightIcon, title: t(c.highlightTitleKey), body: t(c.highlightBodyKey) },
   ]
 
-  const downloadButton = (withArrow = false) => (
-    <a href={c.url} {...(c.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
-      <Button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 py-3 font-semibold gap-2 hover:scale-105 transition-transform">
-        <Icon className="w-5 h-5" />
-        {t(c.downloadKey)}
-        {withArrow && <ArrowRight className="w-4 h-4" />}
-      </Button>
-    </a>
+  const downloadButton = () => (
+    <Button disabled className="bg-primary text-primary-foreground rounded-full px-8 py-3 font-semibold gap-2">
+      <Icon className="w-5 h-5" />
+      {t("comingSoon")}
+    </Button>
   )
 
   return (
@@ -114,7 +97,7 @@ function Content({ platform }: { platform: VpnPlatform }) {
         <div className="max-w-3xl mx-auto mt-20 text-center">
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">{t("vpnGetTitle")}</h2>
           <p className="text-sm text-muted-foreground mb-8 leading-relaxed">{t(c.installKey)}</p>
-          <div className="flex justify-center">{downloadButton(true)}</div>
+          <div className="flex justify-center">{downloadButton()}</div>
         </div>
       </div>
     </section>

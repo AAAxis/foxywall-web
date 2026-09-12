@@ -93,10 +93,6 @@ const organizationLd = {
   logo: `${BASE_URL}/unnamed.jpeg`,
   image: `${BASE_URL}/unnamed.jpeg`,
   description: DESCRIPTION,
-  sameAs: [
-    "https://apps.apple.com/app/id6757646633",
-    "https://play.google.com/store/apps/details?id=com.theholylabs.rock",
-  ],
 }
 
 const websiteLd = {
